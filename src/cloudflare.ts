@@ -15,7 +15,7 @@ export interface createPagesFunctionHandlerParameters<
 	): Promise<AppLoadContext> | AppLoadContext;
 }
 
-export function createHonoHandler<
+export function remix<
 	E extends Env = Record<string, never>,
 	P extends string = "",
 	I extends Input = Record<string, never>,

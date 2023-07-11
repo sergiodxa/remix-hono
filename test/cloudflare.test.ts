@@ -1,100 +1,90 @@
 import type { ServerBuild } from "@remix-run/cloudflare";
-import type { Context } from "hono";
 
+import { Hono } from "hono";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 
-import { createHonoHandler } from "../src/cloudflare";
+import { remix } from "../src/cloudflare";
 
-describe(createHonoHandler, () => {
-	let build = {
-		assets: {
-			entry: { imports: [], module: "entry/module.js" },
-			routes: {
-				root: {
-					hasAction: false,
-					hasCatchBoundary: false,
-					hasErrorBoundary: false,
-					hasLoader: false,
-					id: "root",
-					module: "root.js",
-					path: "/",
-				},
+const build = {
+	assets: {
+		entry: { imports: [], module: "entry/module.js" },
+		routes: {
+			root: {
+				hasAction: false,
+				hasCatchBoundary: false,
+				hasErrorBoundary: false,
+				hasLoader: false,
+				id: "root",
+				module: "root.js",
+				path: "/",
 			},
-			url: "https://example.com",
-			version: "1.0.0",
 		},
-		assetsBuildDirectory: "/tmp/1234",
-		entry: {
+		url: "https://example.com",
+		version: "1.0.0",
+	},
+	assetsBuildDirectory: "/tmp/1234",
+	entry: {
+		module: {
+			default: () => new Response("body"),
+		},
+	},
+	future: {
+		v2_dev: true,
+		v2_errorBoundary: true,
+		v2_headers: true,
+		v2_meta: true,
+		v2_normalizeFormMethod: true,
+		v2_routeConvention: true,
+		unstable_postcss: false,
+		unstable_tailwind: false,
+	},
+	publicPath: "/",
+	routes: {
+		root: {
+			path: "/",
+			id: "root",
 			module: {
 				default: () => new Response("body"),
 			},
 		},
-		future: {
-			v2_dev: true,
-			v2_errorBoundary: true,
-			v2_headers: true,
-			v2_meta: true,
-			v2_normalizeFormMethod: true,
-			v2_routeConvention: true,
-			unstable_postcss: false,
-			unstable_tailwind: false,
-		},
-		publicPath: "/",
-		routes: {
-			root: {
-				path: "/",
-				id: "root",
-				module: {
-					default: () => new Response("body"),
-				},
-			},
-		},
-	} satisfies ServerBuild;
+	},
+} satisfies ServerBuild;
 
-	let context = {
-		req: { raw: new Request("https://example.com") },
-	} as unknown as Context<Record<string, never>, "", Record<string, never>>;
-
-	let getLoadContext = vi.fn().mockResolvedValue("loadContext");
-	let next = vi.fn().mockResolvedValue("next");
-
+describe("middleware", () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
 	});
 
-	test("should be a function", () => {
-		expect(createHonoHandler).toBeInstanceOf(Function);
-	});
-
-	test("should invoke requestHandler with the correct arguments", async () => {
-		let middleware = createHonoHandler({ build });
-		let result = await middleware(context, next);
-		expect(result).toBeInstanceOf(Response);
-	});
-
-	test("should invoke getLoadContext with the correct arguments", async () => {
-		let middleware = createHonoHandler({ build, getLoadContext });
-
-		await middleware(context, next);
-
-		expect(getLoadContext).toHaveBeenCalledWith(context);
-	});
-
 	test("getLoadContext could return a promise value", async () => {
-		getLoadContext.mockResolvedValueOnce("loadContext");
-		let middleware = createHonoHandler({ build, getLoadContext });
+		let getLoadContext = vi.fn().mockResolvedValueOnce("loadContext");
 
-		await middleware(context, next);
+		let server = new Hono();
+		server.use("*", remix({ mode: "development", build, getLoadContext }));
 
-		expect(getLoadContext).toHaveBeenCalledWith(context);
+		let response = await server.request("/");
+
+		expect(response).toBeInstanceOf(Response);
+		expect(getLoadContext).toHaveBeenCalledTimes(1);
 	});
 
 	test("getLoadContext could return a non-promise value", async () => {
-		getLoadContext.mockReturnValueOnce("loadContext");
-		let middleware = createHonoHandler({ build, getLoadContext });
+		let getLoadContext = vi.fn().mockReturnValueOnce("loadContext");
 
-		await middleware(context, next);
+		let server = new Hono();
+		server.use("*", remix({ mode: "development", build, getLoadContext }));
 
-		expect(getLoadContext).toHaveBeenCalledWith(context);
+		let response = await server.request("/");
+
+		expect(response).toBeInstanceOf(Response);
+		expect(getLoadContext).toHaveBeenCalledTimes(1);
+	});
+
+	test("getLoadContext could be omitted", async () => {
+		let server = new Hono();
+		server.use("*", remix({ mode: "development", build }));
+
+		let response = await server.request("/");
+
+		expect(response).toBeInstanceOf(Response);
 	});
 });

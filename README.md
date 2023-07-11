@@ -26,7 +26,7 @@ import { logDevReady } from "@remix-run/cloudflare";
 import * as build from "@remix-run/dev/server-build";
 import { Hono } from "hono";
 import { handle } from "hono/cloudflare-pages";
-import { createHonoHandler } from "remix-hono";
+import { remix } from "remix-hono";
 
 if (process.env.NODE_ENV === "development") logDevReady(build);
 
@@ -40,16 +40,18 @@ type ContextEnv = { Bindings: Bindings; Variables: Variables };
 
 const server = new Hono<ContextEnv>();
 
-// Create a Remix requestHandler
-const requestHandler = createHonoHandler<ContextEnv>({
-	build,
-	mode: process.env.NODE_ENV as "development" | "production",
-	// getLoadContext is optional, the default function is the same as here
-	getLoadContext: (ctx) => ctx.env,
-});
-
-// Add the requestHandler to your Hono server as a middleware
-server.use("*", requestHandler);
+// Add the Remix middleware to your Hono server
+server.use(
+	"*",
+	remix<ContextEnv>({
+		build,
+		mode: process.env.NODE_ENV as "development" | "production",
+		// getLoadContext is optional, the default function is the same as here
+		getLoadContext(ctx) {
+			return ctx.env;
+		},
+	}),
+);
 
 // Create a Cloudflare Pages request handler for your Hono server
 export const onRequest = handle(server);
@@ -62,7 +64,7 @@ import { basicAuth } from "hono/basic-auth";
 
 server.use("*", basicAuth({ username: "hono", password: "remix" }));
 // Ensure Remix request handler is the last one
-server.use("*", requestHandler);
+server.use("*", remix(options));
 ```
 
 With just that, your app will now have basic auth protection, which can work
