@@ -26,6 +26,13 @@
 		"url": "https://github.com/sergiodxa/remix-hono/issues"
 	},
 	"main": "./build/index.js",
+	"exports": {
+		"cloudflare": {
+			"types": "./build/index.d.ts",
+			"default": "./build/index.js"
+		},
+		"./package.json": "./package.json"
+	},
 	"scripts": {
 		"build": "tsc --project tsconfig.json --outDir ./build",
 		"typecheck": "tsc --project tsconfig.json --noEmit",
