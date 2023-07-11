@@ -17,13 +17,13 @@
 			"url": "https://github.com/sponsors/sergiodxa"
 		}
 	],
-	"homepage": "https://github.com/sergiodxa/remix-hono-adapter#readme",
+	"homepage": "https://github.com/sergiodxa/remix-hono#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/sergiodxa/remix-hono-adapter.git"
+		"url": "git+https://github.com/sergiodxa/remix-hono.git"
 	},
 	"bugs": {
-		"url": "https://github.com/sergiodxa/remix-hono-adapter/issues"
+		"url": "https://github.com/sergiodxa/remix-hono/issues"
 	},
 	"main": "./build/index.js",
 	"scripts": {
