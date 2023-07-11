@@ -1,0 +1,76 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build
+        run: npm run build
+
+  typecheck:
+    name: Typechecker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Typecheck
+        run: npm run typecheck
+
+  test:
+    name: Unit and Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Test
+        run: npm run test -- --coverage
+
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Lint
+        run: npm run lint
