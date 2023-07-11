@@ -5,3 +5,5 @@
 .gitignore
 .npmignore
 tsconfig.json
+prettier.config.mjs
+vitest.config.ts
