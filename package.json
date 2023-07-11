@@ -1,0 +1,61 @@
+{
+	"name": "remix-hono",
+	"version": "0.0.0",
+	"license": "MIT",
+	"description": "A Hono adapter for Remix apps using Cloudflage Pages",
+	"author": "Sergio Xalambrí <hello@sergiodxa.com> (https://sergiodxa.com/)",
+	"keywords": [
+		"remix",
+		"remix-run",
+		"hono",
+		"cloudflare",
+		"cloudflare-pages"
+	],
+	"funding": [
+		{
+			"type": "github",
+			"url": "https://github.com/sponsors/sergiodxa"
+		}
+	],
+	"homepage": "https://github.com/sergiodxa/remix-hono-adapter#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sergiodxa/remix-hono-adapter.git"
+	},
+	"bugs": {
+		"url": "https://github.com/sergiodxa/remix-hono-adapter/issues"
+	},
+	"main": "./build/index.js",
+	"scripts": {
+		"prepare": "npm run build",
+		"build": "tsc --outDir ./build",
+		"typecheck": "tsc --noEmit",
+		"lint": "eslint --ext .ts,.tsx src/ test/",
+		"test": "vitest"
+	},
+	"dependencies": {
+		"@remix-run/cloudflare": "^1.18.1",
+		"hono": "^3.3.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^3.19.0",
+		"@edge-runtime/vm": "^3.0.3",
+		"@remix-run/node": "^1.18.1",
+		"@typescript-eslint/eslint-plugin": "^6.0.0",
+		"@typescript-eslint/parser": "^6.0.0",
+		"eslint": "^8.44.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-import-resolver-typescript": "^3.5.5",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-prefer-let": "^3.0.1",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-promise": "^6.0.0",
+		"eslint-plugin-testing-library": "^5.1.0",
+		"eslint-plugin-unicorn": "^47.0.0",
+		"prettier": "^3.0.0",
+		"tsc": "^2.0.4",
+		"vite": "^4.4.2",
+		"vite-tsconfig-paths": "^4.2.0",
+		"vitest": "^0.33.0"
+	}
+}
