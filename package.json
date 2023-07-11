@@ -27,7 +27,6 @@
 	},
 	"main": "./build/index.js",
 	"scripts": {
-		"prepare": "npm run build",
 		"build": "tsc --outDir ./build",
 		"typecheck": "tsc --noEmit",
 		"lint": "eslint --ext .ts,.tsx src/ test/",
