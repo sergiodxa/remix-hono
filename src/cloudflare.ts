@@ -22,7 +22,7 @@ export function createHonoHandler<
 >({
 	mode,
 	build,
-	getLoadContext = async (context) => context as unknown as AppLoadContext,
+	getLoadContext = (context) => context.env as unknown as AppLoadContext,
 }: createPagesFunctionHandlerParameters<E, P, I>): MiddlewareHandler {
 	return async function middleware(context) {
 		let requestHandler = createRequestHandler(build, mode);

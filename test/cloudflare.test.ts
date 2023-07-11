@@ -67,12 +67,30 @@ describe(createHonoHandler, () => {
 	});
 
 	test("should invoke requestHandler with the correct arguments", async () => {
-		let middleware = createHonoHandler({ build, getLoadContext });
+		let middleware = createHonoHandler({ build });
 		let result = await middleware(context, next);
 		expect(result).toBeInstanceOf(Response);
 	});
 
 	test("should invoke getLoadContext with the correct arguments", async () => {
+		let middleware = createHonoHandler({ build, getLoadContext });
+
+		await middleware(context, next);
+
+		expect(getLoadContext).toHaveBeenCalledWith(context);
+	});
+
+	test("getLoadContext could return a promise value", async () => {
+		getLoadContext.mockResolvedValueOnce("loadContext");
+		let middleware = createHonoHandler({ build, getLoadContext });
+
+		await middleware(context, next);
+
+		expect(getLoadContext).toHaveBeenCalledWith(context);
+	});
+
+	test("getLoadContext could return a non-promise value", async () => {
+		getLoadContext.mockReturnValueOnce("loadContext");
 		let middleware = createHonoHandler({ build, getLoadContext });
 
 		await middleware(context, next);

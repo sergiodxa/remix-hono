@@ -44,6 +44,7 @@ const server = new Hono<ContextEnv>();
 const requestHandler = createHonoHandler<ContextEnv>({
 	build,
 	mode: process.env.NODE_ENV as "development" | "production",
+	// getLoadContext is optional, the default function is the same as here
 	getLoadContext: (ctx) => ctx.env,
 });
 
