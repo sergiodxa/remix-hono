@@ -31,16 +31,16 @@
 			"default": "./build/cloudflare.js"
 		},
 		"./session": {
-			"types": "./build/session.d.ts",
-			"default": "./build/session.js"
+			"types": "./build/middlewares/session.d.ts",
+			"default": "./build/middlewares/session.js"
 		},
 		"./session/cookie": {
-			"types": "./build/cookie-session.d.ts",
-			"default": "./build/cookie-session.js"
+			"types": "./build/middlewares/cookie-session.d.ts",
+			"default": "./build/middlewares/cookie-session.js"
 		},
 		"./session/worker-kv": {
-			"types": "./build/worker-kv-session.d.ts",
-			"default": "./build/worker-kv-session.js"
+			"types": "./build/middlewares/worker-kv-session.d.ts",
+			"default": "./build/middlewares/worker-kv-session.js"
 		},
 		"./package.json": "./package.json"
 	},
