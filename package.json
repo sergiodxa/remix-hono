@@ -27,7 +27,7 @@
 	},
 	"main": "./build/index.js",
 	"exports": {
-		"cloudflare": {
+		"./cloudflare": {
 			"types": "./build/index.d.ts",
 			"default": "./build/index.js"
 		},
