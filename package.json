@@ -30,6 +30,18 @@
 			"types": "./build/cloudflare.d.ts",
 			"default": "./build/cloudflare.js"
 		},
+		"./cookie-session": {
+			"types": "./build/cookie-session.d.ts",
+			"default": "./build/cookie-session.js"
+		},
+		"./kv-session": {
+			"types": "./build/kv-session.d.ts",
+			"default": "./build/kv-session.js"
+		},
+		"./session": {
+			"types": "./build/session.d.ts",
+			"default": "./build/session.js"
+		},
 		"./package.json": "./package.json"
 	},
 	"scripts": {

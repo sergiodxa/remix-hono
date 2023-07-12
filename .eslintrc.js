@@ -25,6 +25,8 @@ module.exports = {
 
 		"prefer-let/prefer-let": 2,
 
+		"unicorn/prevent-abbreviations": "off",
+
 		"import/order": [
 			"error",
 			{

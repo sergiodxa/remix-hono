@@ -3,7 +3,7 @@ import type { Context, MiddlewareHandler, Env, Input } from "hono";
 
 import { createRequestHandler } from "@remix-run/cloudflare";
 
-export interface createPagesFunctionHandlerParameters<
+export interface RemixMiddlewareOptions<
 	E extends Env = Record<string, never>,
 	P extends string = "",
 	I extends Input = Record<string, never>,
@@ -23,7 +23,7 @@ export function remix<
 	mode,
 	build,
 	getLoadContext = (context) => context.env as unknown as AppLoadContext,
-}: createPagesFunctionHandlerParameters<E, P, I>): MiddlewareHandler {
+}: RemixMiddlewareOptions<E, P, I>): MiddlewareHandler {
 	return async function middleware(context) {
 		let requestHandler = createRequestHandler(build, mode);
 		let loadContext = getLoadContext(context);
