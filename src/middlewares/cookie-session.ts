@@ -16,7 +16,7 @@ type BindingsObject<Secret extends string> = {
 	[K in Secret]: string;
 };
 
-export function kvSession<
+export function cookieSession<
 	SecretBinding extends string,
 	Data = SessionData,
 	FlashData = Data,
@@ -39,7 +39,9 @@ export function kvSession<
 			let secrets = options.cookie.secrets(context);
 
 			if (secrets.length === 0) {
-				throw new ReferenceError("The secrets for the kvSession are not set.");
+				throw new ReferenceError(
+					"The secrets for the cookieSession are not set.",
+				);
 			}
 
 			return createCookieSessionStorage<Data, FlashData>({
