@@ -1,9 +1,10 @@
+import type { Context, MiddlewareHandler } from "hono";
+
 import {
 	CookieOptions,
 	SessionData,
 	createWorkersKVSessionStorage,
 } from "@remix-run/cloudflare";
-import { Context, Hono, MiddlewareHandler } from "hono";
 
 import { session } from "./session";
 
@@ -15,7 +16,7 @@ type BindingsObject<KV extends string, Secret extends string> = {
 	[K in KV | Secret]: K extends KV ? KVNamespace : string;
 };
 
-export function kvSession<
+export function workerKVSession<
 	KVBinding extends string,
 	SecretBinding extends string,
 	Data = SessionData,
@@ -54,17 +55,3 @@ export function kvSession<
 		},
 	});
 }
-
-new Hono().use(
-	"*",
-	kvSession({
-		autoCommit: true,
-		cookie: {
-			name: "session",
-			secrets(context) {
-				return [context.env.SECRET];
-			},
-		},
-		binding: "KV_BINDING",
-	}),
-);

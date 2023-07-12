@@ -1,9 +1,10 @@
+import type { Context, MiddlewareHandler } from "hono";
+
 import {
 	CookieOptions,
 	SessionData,
 	createCookieSessionStorage,
 } from "@remix-run/cloudflare";
-import { Context, Hono, MiddlewareHandler } from "hono";
 
 import { session } from "./session";
 
@@ -47,17 +48,3 @@ export function kvSession<
 		},
 	});
 }
-
-new Hono().use(
-	"*",
-	kvSession({
-		autoCommit: true,
-		cookie: {
-			name: "__session",
-			httpOnly: true,
-			secrets(context) {
-				return [context.env.SECRET];
-			},
-		},
-	}),
-);

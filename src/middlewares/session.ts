@@ -1,5 +1,9 @@
-import { Session, SessionData, SessionStorage } from "@remix-run/cloudflare";
-import { Context, Env, Input, MiddlewareHandler } from "hono";
+import type {
+	Session,
+	SessionData,
+	SessionStorage,
+} from "@remix-run/cloudflare";
+import type { Context, Env, Input, MiddlewareHandler } from "hono";
 
 const sessionStorageSymbol = Symbol();
 const sessionSymbol = Symbol();

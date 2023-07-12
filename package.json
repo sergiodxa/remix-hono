@@ -30,17 +30,17 @@
 			"types": "./build/cloudflare.d.ts",
 			"default": "./build/cloudflare.js"
 		},
-		"./cookie-session": {
-			"types": "./build/cookie-session.d.ts",
-			"default": "./build/cookie-session.js"
-		},
-		"./kv-session": {
-			"types": "./build/kv-session.d.ts",
-			"default": "./build/kv-session.js"
-		},
 		"./session": {
 			"types": "./build/session.d.ts",
 			"default": "./build/session.js"
+		},
+		"./session/cookie": {
+			"types": "./build/cookie-session.d.ts",
+			"default": "./build/cookie-session.js"
+		},
+		"./session/worker-kv": {
+			"types": "./build/worker-kv-session.d.ts",
+			"default": "./build/worker-kv-session.js"
 		},
 		"./package.json": "./package.json"
 	},
