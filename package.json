@@ -2,7 +2,7 @@
 	"name": "remix-hono",
 	"version": "0.0.7",
 	"license": "MIT",
-	"description": "A Hono adapter for Remix apps using Cloudflage Pages",
+	"description": "Hono middlewares for Remix",
 	"author": "Sergio Xalambrí <hello@sergiodxa.com> (https://sergiodxa.com/)",
 	"keywords": [
 		"remix",
