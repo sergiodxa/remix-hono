@@ -16,10 +16,12 @@ export function session<
 	FlashData = Data,
 >(options: {
 	autoCommit?: boolean;
-	createSessionStorage(env: Context<E, P, I>): SessionStorage<Data, FlashData>;
+	createSessionStorage(
+		context: Context<E, P, I>,
+	): SessionStorage<Data, FlashData>;
 }): MiddlewareHandler {
 	return async function middleware(context, next) {
-		let sessionStorage = options.createSessionStorage(context.env);
+		let sessionStorage = options.createSessionStorage(context);
 
 		context.set(sessionStorageSymbol, sessionStorage);
 
