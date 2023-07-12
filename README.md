@@ -1,4 +1,4 @@
-# Remix adapter for Hono
+# Remix + Hono
 
 > [Remix](https://remix.run) is a web framework for building web applications,
 > which can run on the Edge.
