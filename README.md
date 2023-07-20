@@ -26,7 +26,7 @@ import { logDevReady } from "@remix-run/cloudflare";
 import * as build from "@remix-run/dev/server-build";
 import { Hono } from "hono";
 import { handle } from "hono/cloudflare-pages";
-import { remix } from "remix-hono/cloudflare";
+import { remix } from "remix-hono/handler";
 
 if (process.env.NODE_ENV === "development") logDevReady(build);
 
@@ -113,6 +113,7 @@ Session objects.
 
 ```ts
 import { getSessionStorage, getSession } from "remix-hono/session";
+
 server.use(
 	"*",
 	remix<ContextEnv>({
