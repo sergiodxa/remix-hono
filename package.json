@@ -26,6 +26,10 @@
 		"url": "https://github.com/sergiodxa/remix-hono/issues"
 	},
 	"exports": {
+		"./handler": {
+			"types": "./build/handler.d.ts",
+			"default": "./build/handler.js"
+		},
 		"./cloudflare": {
 			"types": "./build/cloudflare.d.ts",
 			"default": "./build/cloudflare.js"
