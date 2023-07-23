@@ -2,7 +2,7 @@ import type {
 	Session,
 	SessionData,
 	SessionStorage,
-} from "@remix-run/cloudflare";
+} from "@remix-run/server-runtime";
 import type { Context, Env, Input, MiddlewareHandler } from "hono";
 
 const sessionStorageSymbol = Symbol();
