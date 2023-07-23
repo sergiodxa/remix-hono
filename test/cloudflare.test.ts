@@ -71,4 +71,22 @@ describe(staticAssets.name, () => {
 		expect(fetch).toHaveBeenCalledOnce();
 		expect(next).toHaveBeenCalledOnce();
 	});
+
+	test("throws if the binding is not set", async () => {
+		let next = vi.fn().mockResolvedValueOnce(true);
+
+		let url = "https://example.com";
+
+		let middleware = staticAssets();
+
+		await expect(
+			middleware(
+				{
+					env: {},
+					req: { url, raw: new Request(url) },
+				} as unknown as Context,
+				next,
+			),
+		).rejects.toThrowError("The binding ASSETS is not set.");
+	});
 });
