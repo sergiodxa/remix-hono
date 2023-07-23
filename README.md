@@ -14,7 +14,7 @@ your web application.
 ## Installation
 
 ```sh
-npm add remix-hono
+npm add remix-hono @remix-run/cloudflare
 ```
 
 ## Usage

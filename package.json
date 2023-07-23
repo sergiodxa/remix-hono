@@ -48,13 +48,16 @@
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@remix-run/cloudflare": "^1.18.1",
 		"hono": "^3.3.0"
+	},
+	"optionalDependencies": {
+		"@remix-run/cloudflare": "^1.19.1"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^3.19.0",
 		"@edge-runtime/vm": "^3.0.3",
-		"@remix-run/node": "^1.18.1",
+		"@remix-run/cloudflare": "^1.19.1",
+		"@remix-run/node": "^1.19.1",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"@vitest/coverage-v8": "^0.33.0",
