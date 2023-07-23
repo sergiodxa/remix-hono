@@ -48,7 +48,8 @@
 		"test": "vitest"
 	},
 	"dependencies": {
-		"hono": "^3.3.0"
+		"@remix-run/server-runtime": "^1.19.1",
+		"hono": "^3.3.3"
 	},
 	"optionalDependencies": {
 		"@remix-run/cloudflare": "^1.19.1"
