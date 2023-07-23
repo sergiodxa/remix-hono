@@ -12,6 +12,10 @@ on:
           - minor
           - patch
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   bump-version:
     name: Bump version

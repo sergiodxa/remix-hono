@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   publish-npm:
     name: "Publish to npm"
