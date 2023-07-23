@@ -51,4 +51,24 @@ describe(staticAssets.name, () => {
 
 		await expect(response.text()).resolves.toBe("body");
 	});
+
+	test("calls `next` if the fetch throw", async () => {
+		let fetch = vi.fn().mockRejectedValueOnce(new Error("Fetch error"));
+		let next = vi.fn().mockResolvedValueOnce(true);
+
+		let url = "https://example.com";
+
+		let middleware = staticAssets();
+
+		await middleware(
+			{
+				env: { ASSETS: { fetch } },
+				req: { url, raw: new Request(url) },
+			} as unknown as Context,
+			next,
+		);
+
+		expect(fetch).toHaveBeenCalledOnce();
+		expect(next).toHaveBeenCalledOnce();
+	});
 });
