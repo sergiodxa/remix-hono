@@ -9,16 +9,18 @@ import {
 
 import { session } from "./session";
 
-export function staticAssets(): MiddlewareHandler<{
-	Bindings: { ASSETS: Fetcher };
-}> {
+export function staticAssets(): MiddlewareHandler {
 	return async function staticAssets(ctx, next) {
+		let binding = ctx.env.ASSETS as Fetcher | undefined;
+
+		if (!binding) throw new ReferenceError("The binding ASSETS is not set.");
+
 		let response: Response;
 
 		ctx.req.raw.headers.delete("if-none-match");
 
 		try {
-			response = await ctx.env.ASSETS.fetch(ctx.req.url, ctx.req.raw.clone());
+			response = await binding.fetch(ctx.req.url, ctx.req.raw.clone());
 			if (response.status >= 400) return next();
 			return new Response(response.body, response);
 		} catch {
