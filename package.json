@@ -55,7 +55,7 @@
 		"@remix-run/cloudflare": "^1.19.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^3.19.0",
+		"@cloudflare/workers-types": "^4.20230717.1",
 		"@edge-runtime/vm": "^3.0.3",
 		"@remix-run/cloudflare": "^1.19.1",
 		"@remix-run/node": "^1.19.1",
