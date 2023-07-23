@@ -1,37 +1,121 @@
-import type { AppLoadContext, ServerBuild } from "@remix-run/cloudflare";
-import type { Context, MiddlewareHandler, Env, Input } from "hono";
+import type { Context, MiddlewareHandler } from "hono";
 
-import { createRequestHandler } from "@remix-run/cloudflare";
+import {
+	CookieOptions,
+	SessionData,
+	createWorkersKVSessionStorage,
+	createCookieSessionStorage,
+} from "@remix-run/cloudflare";
 
-export interface RemixMiddlewareOptions<
-	E extends Env = Record<string, never>,
-	P extends string = "",
-	I extends Input = Record<string, never>,
-> {
-	build: ServerBuild;
-	mode?: "development" | "production";
-	getLoadContext?(
-		event: Context<E, P, I>,
-	): Promise<AppLoadContext> | AppLoadContext;
-}
+import { session } from "./session";
 
-export function remix<
-	E extends Env = Record<string, never>,
-	P extends string = "",
-	I extends Input = Record<string, never>,
->({
-	mode,
-	build,
-	getLoadContext = (context) => context.env as unknown as AppLoadContext,
-}: RemixMiddlewareOptions<E, P, I>): MiddlewareHandler {
-	return async function middleware(context) {
-		let requestHandler = createRequestHandler(build, mode);
-		let loadContext = getLoadContext(context);
-		return await requestHandler(
-			context.req.raw,
-			loadContext instanceof Promise ? await loadContext : loadContext,
-		);
+export function staticAssets(): MiddlewareHandler<{
+	Bindings: { ASSETS: Fetcher };
+}> {
+	return async function staticAssets(ctx, next) {
+		let response: Response;
+
+		ctx.req.raw.headers.delete("if-none-match");
+
+		try {
+			response = await ctx.env.ASSETS.fetch(ctx.req.url, ctx.req.raw.clone());
+			if (response.status >= 400) return next();
+			return new Response(response.body, response);
+		} catch {
+			return next();
+		}
 	};
 }
 
-export { createRequestHandler } from "@remix-run/cloudflare";
+/* Middleware for sessions with Worker KV */
+type WorkerKVBindingsObject<KV extends string, Secret extends string> = {
+	[K in KV | Secret]: K extends KV ? KVNamespace : string;
+};
+
+type GetWorkerKVSecretsFunction<KV extends string, Secret extends string> = (
+	context: Context<{ Bindings: WorkerKVBindingsObject<KV, Secret> }>,
+) => string[];
+
+export function workerKVSession<
+	KVBinding extends string,
+	SecretBinding extends string,
+	Data = SessionData,
+	FlashData = Data,
+>(options: {
+	autoCommit?: boolean;
+	cookie: Omit<CookieOptions, "secrets"> & {
+		name: string;
+		secrets: GetWorkerKVSecretsFunction<KVBinding, SecretBinding>;
+	};
+	binding: KVBinding;
+}): MiddlewareHandler {
+	return session<
+		{ Bindings: WorkerKVBindingsObject<KVBinding, SecretBinding> },
+		"",
+		Record<string, unknown>,
+		Data,
+		FlashData
+	>({
+		autoCommit: options.autoCommit,
+		createSessionStorage(context) {
+			if (!(options.binding in context.env)) {
+				throw new ReferenceError("The binding for the kvSession is not set.");
+			}
+
+			let secrets = options.cookie.secrets(context);
+
+			if (secrets.length === 0) {
+				throw new ReferenceError("The secrets for the kvSession are not set.");
+			}
+
+			return createWorkersKVSessionStorage<Data, FlashData>({
+				kv: context.env[options.binding] as KVNamespace,
+				cookie: { ...options.cookie, secrets },
+			});
+		},
+	});
+}
+
+/* Middleware for sessions with Cookies */
+type CookieBindingsObject<Secret extends string> = {
+	[K in Secret]: string;
+};
+
+type GetCookieSecretsFunction<Secret extends string> = (
+	context: Context<{ Bindings: CookieBindingsObject<Secret> }>,
+) => string[];
+
+export function cookieSession<
+	SecretBinding extends string,
+	Data = SessionData,
+	FlashData = Data,
+>(options: {
+	autoCommit?: boolean;
+	cookie: Omit<CookieOptions, "secrets"> & {
+		name: string;
+		secrets: GetCookieSecretsFunction<SecretBinding>;
+	};
+}): MiddlewareHandler {
+	return session<
+		{ Bindings: CookieBindingsObject<SecretBinding> },
+		"",
+		Record<string, unknown>,
+		Data,
+		FlashData
+	>({
+		autoCommit: options.autoCommit,
+		createSessionStorage(context) {
+			let secrets = options.cookie.secrets(context);
+
+			if (secrets.length === 0) {
+				throw new ReferenceError(
+					"The secrets for the cookieSession are not set.",
+				);
+			}
+
+			return createCookieSessionStorage<Data, FlashData>({
+				cookie: { ...options.cookie, secrets },
+			});
+		},
+	});
+}

@@ -51,11 +51,15 @@ export function session<
 export function getSessionStorage<Data = SessionData, FlashData = Data>(
 	context: Context,
 ): SessionStorage<Data, FlashData> {
-	return context.get(sessionStorageSymbol);
+	let sessionStorage = context.get(sessionStorageSymbol);
+	if (!sessionStorage) throw new Error("A session middleware was not set.");
+	return sessionStorage as SessionStorage<Data, FlashData>;
 }
 
 export function getSession<Data = SessionData, FlashData = Data>(
 	context: Context,
 ): Session<Data, FlashData> {
-	return context.get(sessionSymbol);
+	let session = context.get(sessionSymbol);
+	if (!session) throw new Error("A session middleware was not set.");
+	return session as Session<Data, FlashData>;
 }

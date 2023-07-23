@@ -35,16 +35,8 @@
 			"default": "./build/cloudflare.js"
 		},
 		"./session": {
-			"types": "./build/middlewares/session.d.ts",
-			"default": "./build/middlewares/session.js"
-		},
-		"./session/cookie": {
-			"types": "./build/middlewares/cookie-session.d.ts",
-			"default": "./build/middlewares/cookie-session.js"
-		},
-		"./session/worker-kv": {
-			"types": "./build/middlewares/worker-kv-session.d.ts",
-			"default": "./build/middlewares/worker-kv-session.js"
+			"types": "./build/session.d.ts",
+			"default": "./build/session.js"
 		},
 		"./package.json": "./package.json"
 	},

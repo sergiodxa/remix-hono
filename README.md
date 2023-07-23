@@ -43,7 +43,7 @@ const server = new Hono<ContextEnv>();
 // Add the Remix middleware to your Hono server
 server.use(
 	"*",
-	remix<ContextEnv>({
+	remix({
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
@@ -62,15 +62,18 @@ Now, you can add more Hono middlewares, like the basic auth middleware:
 ```ts
 import { basicAuth } from "hono/basic-auth";
 
-server.use("*", basicAuth({ username: "hono", password: "remix" }));
-// Ensure Remix request handler is the last one
-server.use("*", remix(options));
+server.use(
+	"*",
+	basicAuth({ username: "hono", password: "remix" }),
+	// Ensure Remix request handler is the last one
+	remix(options),
+);
 ```
 
 With just that, your app will now have basic auth protection, which can work
 great of preview applications.
 
-## Session Middleware
+## Session Management
 
 Additionally to the `remix` Hono middleware, there are other three middlewares
 to work with Remix sessions.
@@ -136,7 +139,7 @@ mechanism. If you want to use the Worker KV session storage you can use the
 `workerKVSession` middleware instead.
 
 ```ts
-import { workerKVSession } from "remix-hono/session/worker-kv";
+import { workerKVSession } from "remix-hono/cloudflare";
 
 server.use(
 	"*",
@@ -159,7 +162,7 @@ If you want to use the cookie session storage, you can use the `cookieSession`
 middleware instead.
 
 ```ts
-import { cookieSession } from "remix-hono/session/cookie";
+import { cookieSession } from "remix-hono/cloudflare";
 
 server.use(
 	"*",
@@ -178,6 +181,24 @@ server.use(
 
 In both `workerKVSession` and `cookieSession` you use `getSession` and
 `getSessionStorage` imported from `remix-hono/session`
+
+## Static Assets on Cloudflare
+
+If you're using Remix Hono with Cloudflare, you will need to serve your static
+from the public folder (except for `public/build`). The `staticAssets`
+middleware serves this purpose.
+
+```ts
+import { staticAssets } from "remix-hono/cloudflare";
+import { remix } from "remix-hono/handler";
+
+server.use(
+	"*",
+	staticAssets(),
+	// Add Remix request handler as the last middleware
+	remix(options),
+);
+```
 
 ## Author
 
