@@ -70,7 +70,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-promise": "^6.0.0",
 		"eslint-plugin-testing-library": "^5.1.0",
-		"eslint-plugin-unicorn": "^47.0.0",
+		"eslint-plugin-unicorn": "^48.0.0",
 		"prettier": "^3.0.0",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.2",
