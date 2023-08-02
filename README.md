@@ -274,12 +274,12 @@ in case you need it.
 
 ## HTTPS Only
 
-You can enforce your server to use HTTPS only with the `httpOnly` middleware.
+You can enforce your server to use HTTPS only with the `httpsOnly` middleware.
 
 ```ts
-import { httpOnly } from "remix-hono/security";
+import { httpsOnly } from "remix-hono/security";
 
-server.use("*", httpOnly());
+server.use("*", httpsOnly());
 ```
 
 ## Trailing Slash
