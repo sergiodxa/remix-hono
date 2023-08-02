@@ -250,6 +250,24 @@ import { httpOnly } from "remix-hono/security";
 server.use("*", httpOnly());
 ```
 
+## Trailing Slash
+
+You can enforce your server to use trailing slashes with the `trailingSlash`
+middleware.
+
+```ts
+import { trailingSlash } from "remix-hono/trailing-slash";
+
+// By default, trailing slashes are disabled, so `https://company.tld/about/`
+// will be redirect to `https://company.tld/about`
+server.use("*", trailingSlash());
+server.use("*", trailingSlash({ enabled: false }));
+
+// You can also enable trailing slashes, so `https://company.tld/about` will be
+// redirect to `https://company.tld/about/` instead
+server.use("*", trailingSlash({ enabled: true }));
+```
+
 ## Author
 
 - [Sergio Xalambrí](https://sergiodxa.com)
