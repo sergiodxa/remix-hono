@@ -268,6 +268,33 @@ server.use("*", trailingSlash({ enabled: false }));
 server.use("*", trailingSlash({ enabled: true }));
 ```
 
+## Typed Envs with Zod
+
+The `typedEnv` helper let's you get the environment variables for any runtimes
+and use Zod to validate it against a schema.
+
+First install Zod if you haven't installed it yet.
+
+```sh
+npm add zod
+```
+
+Then use the helper in any middleware or request handler.
+
+```ts
+import { typedEnv } from "remix-hono/typed-env";
+
+// Define your schema
+const Schema = z.object({ SECRET: z.string() });
+
+// Use the helper
+server.get("/about", (ctx) => {
+	let env = typedEnv(ctx, Schema);
+	let secret = env.SECRET; // or typedEnv(ctx, Schema, "SECRET");
+	// do something here
+});
+```
+
 ## Author
 
 - [Sergio Xalambrí](https://sergiodxa.com)
