@@ -240,6 +240,16 @@ server.use(
 There's also an `i18next.get` function that returns the `RemixI18Next` instance
 in case you need it.
 
+## HTTPS Only
+
+You can enforce your server to use HTTPS only with the `httpOnly` middleware.
+
+```ts
+import { httpOnly } from "remix-hono/security";
+
+server.use("*", httpOnly());
+```
+
 ## Author
 
 - [Sergio Xalambrí](https://sergiodxa.com)
