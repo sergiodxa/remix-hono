@@ -6,10 +6,17 @@ import {
 	createWorkersKVSessionStorage,
 	createCookieSessionStorage,
 } from "@remix-run/cloudflare";
+import { cacheHeader } from "pretty-cache-header";
 
 import { session } from "./session";
 
-export function staticAssets(): MiddlewareHandler {
+interface StaticAssetsOptions {
+	cache?: Parameters<typeof cacheHeader>[0];
+}
+
+export function staticAssets(
+	options: StaticAssetsOptions = {},
+): MiddlewareHandler {
 	return async function staticAssets(ctx, next) {
 		let binding = ctx.env.ASSETS as Fetcher | undefined;
 
@@ -21,10 +28,20 @@ export function staticAssets(): MiddlewareHandler {
 
 		try {
 			response = await binding.fetch(ctx.req.url, ctx.req.raw.clone());
-			if (response.status >= 400) return next();
-			return new Response(response.body, response);
+
+			// If the request failed, we just call the next middleware
+			if (response.status >= 400) return await next();
+
+			response = new Response(response.body, response);
+
+			// If cache options are configured, we set the cache-control header
+			if (options.cache) {
+				response.headers.set("cache-control", cacheHeader(options.cache));
+			}
+
+			return response;
 		} catch {
-			return next();
+			return await next();
 		}
 	};
 }

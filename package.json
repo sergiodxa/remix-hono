@@ -49,7 +49,8 @@
 	},
 	"dependencies": {
 		"@remix-run/server-runtime": "^1.19.1",
-		"hono": "^3.3.3"
+		"hono": "^3.3.3",
+		"pretty-cache-header": "^1.0.0"
 	},
 	"optionalDependencies": {
 		"@remix-run/cloudflare": "^1.19.1"
