@@ -13,9 +13,22 @@ your web application.
 
 ## Installation
 
+Install the package
+
 ```sh
-npm add remix-hono @remix-run/cloudflare
+npm add remix-hono
 ```
+
+The following packages are optional dependencies, you will need to install them
+depending on what features from remix-hono you're using.
+
+- `@remix-run/cloudflare` if you're using Cloudflare Pages or Workers
+- `i18next` and `remix-i18next` if you're using i18n
+- `zod` if you're using `typedEnv`
+
+> **Note** you don't really need to install them if you don't use them, but you
+> will need to install them yourself (they don't come not automatically) if you
+> use the features that depends on those packages.
 
 ## Usage
 
@@ -25,6 +38,7 @@ Create your Hono + Remix server:
 import { logDevReady } from "@remix-run/cloudflare";
 import * as build from "@remix-run/dev/server-build";
 import { Hono } from "hono";
+// You can also use it with other runtimes
 import { handle } from "hono/cloudflare-pages";
 import { remix } from "remix-hono/handler";
 
@@ -86,6 +100,8 @@ You can use the different middlewares included in this package to do that:
 
 ```ts
 import { session } from "remix-hono/session";
+// Install the `@remix-run/*` package for your server adapter to grab the
+// factory functions for session storage
 import { createWorkerKVSessionStorage } from "@remix-run/cloudflare";
 
 server.use(
@@ -188,6 +204,14 @@ If you're using Remix Hono with Cloudflare, you will need to serve your static
 from the public folder (except for `public/build`). The `staticAssets`
 middleware serves this purpose.
 
+First install `@remix-run/cloudflare` if you haven't installed it yet.
+
+```sh
+npm add @remix-run/cloudflare
+```
+
+Then use the middleware in your server.
+
 ```ts
 import { staticAssets } from "remix-hono/cloudflare";
 import { remix } from "remix-hono/handler";
@@ -206,6 +230,14 @@ If you're using [remix-i18next](https://github.com/sergiodxa/remix-i18next) to
 support i18n in your Remix app, the `i18next` middleware let's you setup it for
 your Remix app as a middleware that you can later use in your `getLoadContext`
 function to pass the `locale` and `t` functions to your loaders and actions.
+
+First install `i18next` and `remix-i18next` if you haven't already.
+
+```sh
+npm add i18next remix-i18next
+```
+
+Then use the middleware in your server.
 
 ```ts
 import { i18next } from "remix-hono/i18next";
