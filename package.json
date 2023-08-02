@@ -38,9 +38,21 @@
 			"types": "./build/i18next.d.ts",
 			"default": "./build/i18next.js"
 		},
+		"./security": {
+			"types": "./build/security.d.ts",
+			"default": "./build/security.js"
+		},
 		"./session": {
 			"types": "./build/session.d.ts",
 			"default": "./build/session.js"
+		},
+		"./trailing-slash": {
+			"types": "./build/trailing-slash.d.ts",
+			"default": "./build/trailing-slash.js"
+		},
+		"./typed-env": {
+			"types": "./build/typed-env.d.ts",
+			"default": "./build/typed-env.js"
 		},
 		"./package.json": "./package.json"
 	},
