@@ -200,6 +200,46 @@ server.use(
 );
 ```
 
+## i18next integration
+
+If you're using [remix-i18next](https://github.com/sergiodxa/remix-i18next) to
+support i18n in your Remix app, the `i18next` middleware let's you setup it for
+your Remix app as a middleware that you can later use in your `getLoadContext`
+function to pass the `locale` and `t` functions to your loaders and actions.
+
+```ts
+import { i18next } from "remix-hono/i18next";
+
+// Same options as in remix-i18next
+server.use("*", i18next(options));
+```
+
+Then, in your `getLoadContext` function you can access the `locale` and `t`
+functions using the helpers `i18next.getLocale` and `i18next.getFixedT`.
+
+```ts
+server.use(
+	"*",
+	remix({
+		build,
+		mode: process.env.NODE_ENV as "development" | "production",
+		// getLoadContext is optional, the default function is the same as here
+		getLoadContext(ctx) {
+			// get the locale from the context
+			let locale = i18next.getLocale(context);
+			// get t function for the default namespace
+			let t = await i18next.getFixedT(context);
+			// get t function for a specific namespace
+			let errorT = await i18next.getFixedT(context, "error");
+			return { env: ctx.env, locale, t, errorT };
+		},
+	}),
+);
+```
+
+There's also an `i18next.get` function that returns the `RemixI18Next` instance
+in case you need it.
+
 ## Author
 
 - [Sergio Xalambrí](https://sergiodxa.com)
