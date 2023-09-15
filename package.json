@@ -65,7 +65,7 @@
 	},
 	"dependencies": {
 		"@remix-run/server-runtime": "^1.19.1",
-		"hono": "^3.3.3",
+		"hono": "^3.6.1",
 		"pretty-cache-header": "^1.0.0"
 	},
 	"optionalDependencies": {

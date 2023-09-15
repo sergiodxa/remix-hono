@@ -1,4 +1,4 @@
-import type { Context, MiddlewareHandler } from "hono";
+import type { Context, Env, Input, MiddlewareHandler } from "hono";
 
 import {
 	CookieOptions,
@@ -14,11 +14,13 @@ interface StaticAssetsOptions {
 	cache?: Parameters<typeof cacheHeader>[0];
 }
 
-export function staticAssets(
-	options: StaticAssetsOptions = {},
-): MiddlewareHandler {
+export function staticAssets<
+	E extends Env = Record<string, never>,
+	P extends string = "",
+	I extends Input = Record<string, never>,
+>(options: StaticAssetsOptions = {}): MiddlewareHandler<E, P, I> {
 	return async function staticAssets(ctx, next) {
-		let binding = ctx.env.ASSETS as Fetcher | undefined;
+		let binding = ctx.env?.ASSETS as Fetcher | undefined;
 
 		if (!binding) throw new ReferenceError("The binding ASSETS is not set.");
 
@@ -67,7 +69,9 @@ export function workerKVSession<
 		secrets: GetWorkerKVSecretsFunction<KVBinding, SecretBinding>;
 	};
 	binding: KVBinding;
-}): MiddlewareHandler {
+}): MiddlewareHandler<{
+	Bindings: WorkerKVBindingsObject<KVBinding, SecretBinding>;
+}> {
 	return session<
 		{ Bindings: WorkerKVBindingsObject<KVBinding, SecretBinding> },
 		"",
@@ -114,7 +118,7 @@ export function cookieSession<
 		name: string;
 		secrets: GetCookieSecretsFunction<SecretBinding>;
 	};
-}): MiddlewareHandler {
+}): MiddlewareHandler<{ Bindings: CookieBindingsObject<SecretBinding> }> {
 	return session<
 		{ Bindings: CookieBindingsObject<SecretBinding> },
 		"",

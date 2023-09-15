@@ -19,11 +19,12 @@ export function session<
 	createSessionStorage(
 		context: Context<E, P, I>,
 	): SessionStorage<Data, FlashData>;
-}): MiddlewareHandler {
+}): MiddlewareHandler<E, P, I> {
 	return async function middleware(context, next) {
 		let sessionStorage = options.createSessionStorage(context);
 
-		context.set(sessionStorageSymbol, sessionStorage);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		context.set<any>(sessionStorageSymbol, sessionStorage);
 
 		// If autoCommit is disabled, we just create the SessionStorage and make it
 		// available with context.get(sessionStorageSymbol), then call next() and
@@ -36,7 +37,8 @@ export function session<
 		);
 
 		// And make it available with context.get(sessionSymbol).
-		context.set(sessionSymbol, session);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		context.set<any>(sessionSymbol, session);
 
 		// Then we call next() to let the rest of the middlewares run.
 		await next();

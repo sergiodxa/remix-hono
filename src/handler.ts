@@ -23,7 +23,7 @@ export function remix<
 	mode,
 	build,
 	getLoadContext = (context) => context.env as unknown as AppLoadContext,
-}: RemixMiddlewareOptions<E, P, I>): MiddlewareHandler {
+}: RemixMiddlewareOptions<E, P, I>): MiddlewareHandler<E, P, I> {
 	return async function middleware(context) {
 		let requestHandler = createRequestHandler(build, mode);
 		let loadContext = getLoadContext(context);
