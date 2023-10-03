@@ -6,12 +6,18 @@ changelog:
   - title: Documentation Changes
     labels:
     - documentation
+  - title: Example
+    labels:
+    - example
   - title: Bug Fixes
     labels:
     - bug
   - title: Deprecations
     labels:
     - deprecated
+  - title: Dependency Updates
+    labels:
+    - dependencies
   - title: Other Changes
     labels:
        - "*"
