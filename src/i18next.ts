@@ -1,4 +1,4 @@
-import type { Context, MiddlewareHandler } from "hono";
+import type { Context, Env, Input, MiddlewareHandler } from "hono";
 import type { RemixI18NextOption } from "remix-i18next";
 
 import { Namespace, TFunction } from "i18next";
@@ -8,9 +8,11 @@ const i18nSymbol = Symbol();
 const LocaleSymbol = Symbol();
 const TSymbol = Symbol();
 
-export function i18next(
-	options: RemixI18NextOption | RemixI18Next,
-): MiddlewareHandler {
+export function i18next<
+	E extends Env = Record<string, never>,
+	P extends string = "",
+	I extends Input = Record<string, never>,
+>(options: RemixI18NextOption | RemixI18Next): MiddlewareHandler<E, P, I> {
 	return async function middleware(ctx, next) {
 		let i18n =
 			options instanceof RemixI18Next ? options : new RemixI18Next(options);
@@ -19,9 +21,12 @@ export function i18next(
 
 		let t = await i18n.getFixedT(locale);
 
-		ctx.set(i18nSymbol, i18n);
-		ctx.set(LocaleSymbol, locale);
-		ctx.set(TSymbol, t);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ctx.set<any>(i18nSymbol, i18n);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ctx.set<any>(LocaleSymbol, locale);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ctx.set<any>(TSymbol, t);
 
 		await next();
 	};
