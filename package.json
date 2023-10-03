@@ -1,6 +1,6 @@
 {
 	"name": "remix-hono",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"license": "MIT",
 	"description": "Hono middlewares for Remix",
 	"author": "Sergio Xalambrí <hello@sergiodxa.com> (https://sergiodxa.com/)",
