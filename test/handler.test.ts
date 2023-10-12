@@ -11,7 +11,6 @@ const build = {
 		routes: {
 			root: {
 				hasAction: false,
-				hasCatchBoundary: false,
 				hasErrorBoundary: false,
 				hasLoader: false,
 				id: "root",
@@ -28,16 +27,7 @@ const build = {
 			default: () => new Response("body"),
 		},
 	},
-	future: {
-		v2_dev: true,
-		v2_errorBoundary: true,
-		v2_headers: true,
-		v2_meta: true,
-		v2_normalizeFormMethod: true,
-		v2_routeConvention: true,
-		unstable_postcss: false,
-		unstable_tailwind: false,
-	},
+	future: {},
 	publicPath: "/",
 	routes: {
 		root: {
@@ -48,6 +38,7 @@ const build = {
 			},
 		},
 	},
+	mode: "development",
 } satisfies ServerBuild;
 
 describe("middleware", () => {
