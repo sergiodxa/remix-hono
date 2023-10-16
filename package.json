@@ -78,7 +78,7 @@
 		"@cloudflare/workers-types": "^3.19.0",
 		"@edge-runtime/vm": "^3.0.3",
 		"@remix-run/cloudflare": "^1.19.1",
-		"@remix-run/node": "^1.19.1",
+		"@remix-run/node": "^2.1.0",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"@vitest/coverage-v8": "^0.34.3",
