@@ -64,7 +64,7 @@
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@remix-run/server-runtime": "^1.19.1",
+		"@remix-run/server-runtime": "^2.1.0",
 		"hono": "^3.6.1",
 		"pretty-cache-header": "^1.0.0"
 	},
