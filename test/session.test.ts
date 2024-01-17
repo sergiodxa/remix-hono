@@ -2,7 +2,7 @@ import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { Context } from "hono";
 import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
-import { session } from "../src/session";
+import { getSession, getSessionStorage, session } from "../src/session";
 
 vi.mock("@remix-run/node", () => {
 	return {
@@ -24,6 +24,7 @@ const createSessionStorage = vi.fn().mockImplementation(() => sessionStorage);
 
 const c = {
 	set: vi.fn(),
+	get: vi.fn(),
 	req: {
 		raw: {
 			headers: {
@@ -103,5 +104,57 @@ describe(session.name, () => {
 				append: true,
 			},
 		);
+	});
+});
+
+describe(getSessionStorage.name, () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	afterAll(() => {
+		vi.resetAllMocks();
+	});
+
+	test("throws if no session storage", async () => {
+		expect(() => getSessionStorage(c)).toThrowError(
+			"A session middleware was not set.",
+		);
+
+		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
+	});
+
+	test("returns session storage", async () => {
+		let sessionStorage = getSessionStorage({
+			get: vi.fn().mockReturnValueOnce({}),
+		} as unknown as Context);
+
+		expect(sessionStorage).not.toBeNull();
+	});
+});
+
+describe(getSession.name, () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	afterAll(() => {
+		vi.resetAllMocks();
+	});
+
+	test("throws if no session storage", async () => {
+		expect(() => getSession(c)).toThrowError(
+			"A session middleware was not set.",
+		);
+
+		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
+	});
+
+	test("returns session", async () => {
+		let session = getSessionStorage({
+			get: vi.fn().mockReturnValueOnce({}),
+		} as unknown as Context);
+
+		expect(session).not.toBeNull();
 	});
 });
