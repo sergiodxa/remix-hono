@@ -69,10 +69,10 @@
 		"pretty-cache-header": "^1.0.0"
 	},
 	"optionalDependencies": {
-		"@remix-run/cloudflare": "^2.5.0",
-		"i18next": "^23.7.16",
-		"remix-i18next": "^5.5.0",
-		"zod": "^3.22.4"
+		"@remix-run/cloudflare": "^2.0.0",
+		"i18next": "^23.0.0",
+		"remix-i18next": "^5.0.0",
+		"zod": "^3.0.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231218.0",
