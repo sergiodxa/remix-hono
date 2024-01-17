@@ -22,7 +22,9 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 		// If autoCommit is disabled, we just create the SessionStorage and make it
 		// available with c.get(sessionStorageSymbol), then call next() and
 		// return.
-		if (!options.autoCommit) return await next();
+		if (!options.autoCommit) {
+			return await next();
+		}
 
 		// If autoCommit is enabled, we get the Session from the request.
 		let session = await sessionStorage.getSession(
@@ -46,7 +48,9 @@ export function getSessionStorage<Data = SessionData, FlashData = Data>(
 	c: Context,
 ): SessionStorage<Data, FlashData> {
 	let sessionStorage = c.get(sessionStorageSymbol);
-	if (!sessionStorage) throw new Error("A session middleware was not set.");
+	if (!sessionStorage) {
+		throw new Error("A session middleware was not set.");
+	}
 	return sessionStorage as SessionStorage<Data, FlashData>;
 }
 
@@ -54,6 +58,8 @@ export function getSession<Data = SessionData, FlashData = Data>(
 	c: Context,
 ): Session<Data, FlashData> {
 	let session = c.get(sessionSymbol);
-	if (!session) throw new Error("A session middleware was not set.");
+	if (!session) {
+		throw new Error("A session middleware was not set.");
+	}
 	return session as Session<Data, FlashData>;
 }
