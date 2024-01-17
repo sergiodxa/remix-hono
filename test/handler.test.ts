@@ -1,7 +1,7 @@
 import type { ServerBuild } from "@remix-run/server-runtime";
 
 import { Hono } from "hono";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
 import { remix } from "../src/handler";
 
@@ -47,8 +47,12 @@ const build = {
 	mode: "production",
 } satisfies ServerBuild;
 
-describe("middleware", () => {
+describe(remix.name, () => {
 	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	afterAll(() => {
 		vi.resetAllMocks();
 	});
 
