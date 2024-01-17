@@ -11,9 +11,10 @@ const build = {
 		routes: {
 			root: {
 				hasAction: false,
-				hasCatchBoundary: false,
 				hasErrorBoundary: false,
 				hasLoader: false,
+				hasClientAction: false,
+				hasClientLoader: false,
 				id: "root",
 				module: "root.js",
 				path: "/",
@@ -29,14 +30,8 @@ const build = {
 		},
 	},
 	future: {
-		v2_dev: true,
-		v2_errorBoundary: true,
-		v2_headers: true,
-		v2_meta: true,
-		v2_normalizeFormMethod: true,
-		v2_routeConvention: true,
-		unstable_postcss: false,
-		unstable_tailwind: false,
+		v3_fetcherPersist: true,
+		v3_relativeSplatPath: true,
 	},
 	publicPath: "/",
 	routes: {
@@ -48,6 +43,8 @@ const build = {
 			},
 		},
 	},
+	isSpaMode: false,
+	mode: "production",
 } satisfies ServerBuild;
 
 describe("middleware", () => {
