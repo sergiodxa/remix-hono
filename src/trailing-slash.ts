@@ -7,17 +7,17 @@ interface Options {
 /**
  * Enable or disable trailing slashes for SEO purpose.
  */
-export function trailingSlash({ enabled }: Options) {
+export function trailingSlash(options?: Options) {
 	return createMiddleware(async (c, next) => {
 		let url = new URL(c.req.url);
 		let hasTrailingSlash = url.pathname.endsWith("/");
 
-		if (enabled && !hasTrailingSlash) {
+		if (options?.enabled && !hasTrailingSlash) {
 			url.pathname += "/";
 			return c.redirect(url.toString());
 		}
 
-		if (!enabled && hasTrailingSlash) {
+		if (!options?.enabled && hasTrailingSlash) {
 			url.pathname = url.pathname.slice(0, -1);
 			return c.redirect(url.toString());
 		}
