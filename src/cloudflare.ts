@@ -1,4 +1,4 @@
-import type { Context, Env, Input, MiddlewareHandler } from "hono";
+import type { Context } from "hono";
 
 import {
 	CookieOptions,
@@ -6,6 +6,7 @@ import {
 	createWorkersKVSessionStorage,
 	createCookieSessionStorage,
 } from "@remix-run/cloudflare";
+import { createMiddleware } from "hono/factory";
 import { cacheHeader } from "pretty-cache-header";
 
 import { session } from "./session";
@@ -14,22 +15,18 @@ interface StaticAssetsOptions {
 	cache?: Parameters<typeof cacheHeader>[0];
 }
 
-export function staticAssets<
-	E extends Env = Record<string, never>,
-	P extends string = "",
-	I extends Input = Record<string, never>,
->(options: StaticAssetsOptions = {}): MiddlewareHandler<E, P, I> {
-	return async function staticAssets(ctx, next) {
-		let binding = ctx.env?.ASSETS as Fetcher | undefined;
+export function staticAssets(options: StaticAssetsOptions = {}) {
+	return createMiddleware(async (c, next) => {
+		let binding = c.env?.ASSETS as Fetcher | undefined;
 
 		if (!binding) throw new ReferenceError("The binding ASSETS is not set.");
 
 		let response: Response;
 
-		ctx.req.raw.headers.delete("if-none-match");
+		c.req.raw.headers.delete("if-none-match");
 
 		try {
-			response = await binding.fetch(ctx.req.url, ctx.req.raw.clone());
+			response = await binding.fetch(c.req.url, c.req.raw.clone());
 
 			// If the request failed, we just call the next middleware
 			if (response.status >= 400) return await next();
@@ -45,7 +42,7 @@ export function staticAssets<
 		} catch {
 			return await next();
 		}
-	};
+	});
 }
 
 /* Middleware for sessions with Worker KV */
@@ -54,7 +51,7 @@ type WorkerKVBindingsObject<KV extends string, Secret extends string> = {
 };
 
 type GetWorkerKVSecretsFunction<KV extends string, Secret extends string> = (
-	context: Context<{ Bindings: WorkerKVBindingsObject<KV, Secret> }>,
+	c: Context<{ Bindings: WorkerKVBindingsObject<KV, Secret> }>,
 ) => string[];
 
 export function workerKVSession<
@@ -69,30 +66,22 @@ export function workerKVSession<
 		secrets: GetWorkerKVSecretsFunction<KVBinding, SecretBinding>;
 	};
 	binding: KVBinding;
-}): MiddlewareHandler<{
-	Bindings: WorkerKVBindingsObject<KVBinding, SecretBinding>;
-}> {
-	return session<
-		{ Bindings: WorkerKVBindingsObject<KVBinding, SecretBinding> },
-		"",
-		Record<string, unknown>,
-		Data,
-		FlashData
-	>({
+}) {
+	return session<Data, FlashData>({
 		autoCommit: options.autoCommit,
-		createSessionStorage(context) {
-			if (!(options.binding in context.env)) {
+		createSessionStorage(c) {
+			if (!(options.binding in c.env)) {
 				throw new ReferenceError("The binding for the kvSession is not set.");
 			}
 
-			let secrets = options.cookie.secrets(context);
+			let secrets = options.cookie.secrets(c);
 
-			if (secrets.length === 0) {
+			if (secrets.filter(Boolean).length === 0) {
 				throw new ReferenceError("The secrets for the kvSession are not set.");
 			}
 
 			return createWorkersKVSessionStorage<Data, FlashData>({
-				kv: context.env[options.binding] as KVNamespace,
+				kv: c.env[options.binding] as KVNamespace,
 				cookie: { ...options.cookie, secrets },
 			});
 		},
@@ -105,7 +94,7 @@ type CookieBindingsObject<Secret extends string> = {
 };
 
 type GetCookieSecretsFunction<Secret extends string> = (
-	context: Context<{ Bindings: CookieBindingsObject<Secret> }>,
+	c: Context<{ Bindings: CookieBindingsObject<Secret> }>,
 ) => string[];
 
 export function cookieSession<
@@ -118,19 +107,13 @@ export function cookieSession<
 		name: string;
 		secrets: GetCookieSecretsFunction<SecretBinding>;
 	};
-}): MiddlewareHandler<{ Bindings: CookieBindingsObject<SecretBinding> }> {
-	return session<
-		{ Bindings: CookieBindingsObject<SecretBinding> },
-		"",
-		Record<string, unknown>,
-		Data,
-		FlashData
-	>({
+}) {
+	return session<Data, FlashData>({
 		autoCommit: options.autoCommit,
-		createSessionStorage(context) {
-			let secrets = options.cookie.secrets(context);
+		createSessionStorage(c) {
+			let secrets = options.cookie.secrets(c);
 
-			if (secrets.length === 0) {
+			if (secrets.filter(Boolean).length === 0) {
 				throw new ReferenceError(
 					"The secrets for the cookieSession are not set.",
 				);

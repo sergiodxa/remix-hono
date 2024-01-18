@@ -1,37 +1,28 @@
 import type { AppLoadContext, ServerBuild } from "@remix-run/server-runtime";
-import type { Context, MiddlewareHandler, Env, Input } from "hono";
+import type { Context } from "hono";
 
 import { createRequestHandler } from "@remix-run/server-runtime";
+import { createMiddleware } from "hono/factory";
 
-export interface RemixMiddlewareOptions<
-	E extends Env = Record<string, never>,
-	P extends string = "",
-	I extends Input = Record<string, never>,
-> {
+export interface RemixMiddlewareOptions {
 	build: ServerBuild;
 	mode?: "development" | "production";
-	getLoadContext?(
-		event: Context<E, P, I>,
-	): Promise<AppLoadContext> | AppLoadContext;
+	getLoadContext?(c: Context): Promise<AppLoadContext> | AppLoadContext;
 }
 
-export function remix<
-	E extends Env = Record<string, never>,
-	P extends string = "",
-	I extends Input = Record<string, never>,
->({
+export function remix({
 	mode,
 	build,
-	getLoadContext = (context) => context.env as unknown as AppLoadContext,
-}: RemixMiddlewareOptions<E, P, I>): MiddlewareHandler<E, P, I> {
-	return async function middleware(context) {
+	getLoadContext = (c) => c.env as unknown as AppLoadContext,
+}: RemixMiddlewareOptions) {
+	return createMiddleware(async (c) => {
 		let requestHandler = createRequestHandler(build, mode);
-		let loadContext = getLoadContext(context);
+		let loadContext = getLoadContext(c);
 		return await requestHandler(
-			context.req.raw,
+			c.req.raw,
 			loadContext instanceof Promise ? await loadContext : loadContext,
 		);
-	};
+	});
 }
 
 export { createRequestHandler } from "@remix-run/server-runtime";

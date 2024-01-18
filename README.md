@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === "development") logDevReady(build);
 /* type your Cloudflare bindings here */
 type Bindings = {};
 
-/* type your Hono variables (used with ctx.get/ctx.set) here */
+/* type your Hono variables (used with c.get/c.set) here */
 type Variables = {};
 
 type ContextEnv = { Bindings: Bindings; Variables: Variables };
@@ -61,8 +61,8 @@ server.use(
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
-		getLoadContext(ctx) {
-			return ctx.env;
+		getLoadContext(c) {
+			return c.env;
 		},
 	}),
 );
@@ -93,7 +93,7 @@ Additionally to the `remix` Hono middleware, there are other three middlewares
 to work with Remix sessions.
 
 Because Remix sessions typically use a secret coming from the environment you
-will need access to Hono `ctx.env` to use them. If you're using the Worker KV
+will need access to Hono `c.env` to use them. If you're using the Worker KV
 session storage you will also need to pass the KV binding to the middleware.
 
 You can use the different middlewares included in this package to do that:
@@ -108,13 +108,13 @@ server.use(
 	"*",
 	session({
 		autoCommit: true,
-		createSessionStorage(context) {
+		createSessionStorage(c) {
 			return createWorkersKVSessionStorage({
-				kv: context.env.MY_KV_BINDING,
+				kv: c.env.MY_KV_BINDING,
 				cookie: {
 					name: "session",
 					httpOnly: true,
-					secrets: [context.SESSION_SECRET],
+					secrets: [c.SESSION_SECRET],
 				},
 			});
 		},
@@ -139,12 +139,12 @@ server.use(
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
-		getLoadContext(ctx) {
-			let sessionStorage = getSessionStorage(ctx);
-			let session = getSession(ctx);
+		getLoadContext(c) {
+			let sessionStorage = getSessionStorage(c);
+			let session = getSession(c);
 
 			// Return them here to access them in your loaders and actions
-			return { ...ctx.env, sessionStorage, session };
+			return { ...c.env, sessionStorage, session };
 		},
 	}),
 );
@@ -163,9 +163,9 @@ server.use(
 		autoCommit: true, // same as in the session middleware
 		cookie: {
 			name: "session", // all cookie options as in createWorkerKVSessionStorage
-			// In this function, you can access context.env to get the session secret
-			secrets(context) {
-				return [context.env.SECRET];
+			// In this function, you can access c.env to get the session secret
+			secrets(c) {
+				return [c.env.SECRET];
 			},
 		},
 		// The name of the binding using for the KVNamespace
@@ -186,9 +186,9 @@ server.use(
 		autoCommit: true, // same as in the session middleware
 		cookie: {
 			name: "session", // all cookie options as in createCookieSessionStorage
-			// In this function, you can access context.env to get the session secret
-			secrets(context) {
-				return [context.env.SECRET];
+			// In this function, you can access c.env to get the session secret
+			secrets(c) {
+				return [c.env.SECRET];
 			},
 		},
 	}),
@@ -256,14 +256,14 @@ server.use(
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
-		getLoadContext(ctx) {
+		getLoadContext(c) {
 			// get the locale from the context
-			let locale = i18next.getLocale(context);
+			let locale = i18next.getLocale(c);
 			// get t function for the default namespace
-			let t = await i18next.getFixedT(context);
+			let t = await i18next.getFixedT(c);
 			// get t function for a specific namespace
-			let errorT = await i18next.getFixedT(context, "error");
-			return { env: ctx.env, locale, t, errorT };
+			let errorT = await i18next.getFixedT(c, "error");
+			return { env: c.env, locale, t, errorT };
 		},
 	}),
 );
@@ -320,9 +320,9 @@ import { typedEnv } from "remix-hono/typed-env";
 const Schema = z.object({ SECRET: z.string() });
 
 // Use the helper
-server.get("/about", (ctx) => {
-	let env = typedEnv(ctx, Schema);
-	let secret = env.SECRET; // or typedEnv(ctx, Schema, "SECRET");
+server.get("/about", (c) => {
+	let env = typedEnv(c, Schema);
+	let secret = env.SECRET; // or typedEnv(c, Schema, "SECRET");
 	// do something here
 });
 ```

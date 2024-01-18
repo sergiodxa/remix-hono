@@ -1,4 +1,4 @@
-import { MiddlewareHandler } from "hono";
+import { createMiddleware } from "hono/factory";
 
 interface Options {
 	enabled?: boolean;
@@ -7,21 +7,21 @@ interface Options {
 /**
  * Enable or disable trailing slashes for SEO purpose.
  */
-export function trailingSlash({ enabled }: Options): MiddlewareHandler {
-	return async function middleware(context, next) {
-		let url = new URL(context.req.url);
+export function trailingSlash(options?: Options) {
+	return createMiddleware(async (c, next) => {
+		let url = new URL(c.req.url);
 		let hasTrailingSlash = url.pathname.endsWith("/");
 
-		if (enabled && !hasTrailingSlash) {
+		if (options?.enabled && !hasTrailingSlash) {
 			url.pathname += "/";
-			return context.redirect(url.toString());
+			return c.redirect(url.toString());
 		}
 
-		if (!enabled && hasTrailingSlash) {
+		if (!options?.enabled && hasTrailingSlash) {
 			url.pathname = url.pathname.slice(0, -1);
-			return context.redirect(url.toString());
+			return c.redirect(url.toString());
 		}
 
 		return await next();
-	};
+	});
 }
