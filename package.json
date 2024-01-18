@@ -25,6 +25,7 @@
 	"bugs": {
 		"url": "https://github.com/sergiodxa/remix-hono/issues"
 	},
+	"type": "module",
 	"exports": {
 		"./cloudflare": {
 			"types": "./build/cloudflare.d.ts",
