@@ -65,8 +65,8 @@
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@remix-run/server-runtime": "^2.5.0",
-		"hono": "^3.12.5",
+		"@remix-run/server-runtime": "^2.6.0",
+		"hono": "^4.0.0",
 		"pretty-cache-header": "^1.0.0"
 	},
 	"optionalDependencies": {
@@ -80,6 +80,7 @@
 		"@edge-runtime/vm": "^3.1.7",
 		"@remix-run/cloudflare": "^2.5.0",
 		"@remix-run/node": "^2.5.0",
+		"@types/node": "^20.11.17",
 		"@typescript-eslint/eslint-plugin": "^6.19.0",
 		"@typescript-eslint/parser": "^6.19.0",
 		"@vitest/coverage-v8": "^1.2.0",
