@@ -72,7 +72,7 @@
 	"optionalDependencies": {
 		"@remix-run/cloudflare": "^2.0.0",
 		"i18next": "^23.0.0",
-		"remix-i18next": "^5.0.0",
+		"remix-i18next": "^6.0.1",
 		"zod": "^3.0.0"
 	},
 	"devDependencies": {
@@ -95,7 +95,7 @@
 		"eslint-plugin-unicorn": "^51.0.1",
 		"i18next": "^23.7.16",
 		"prettier": "^3.2.4",
-		"remix-i18next": "^5.5.0",
+		"remix-i18next": "^6.0.1",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.11",
 		"vite-tsconfig-paths": "^4.3.1",
