@@ -79,6 +79,20 @@
 		"remix-i18next": "^5.0.0",
 		"zod": "^3.0.0"
 	},
+	"peerDependenciesMeta": {
+		"@remix-run/cloudflare": {
+			"optional": true
+		},
+		"i18next": {
+			"optional": true
+		},
+		"remix-i18next": {
+			"optional": true
+		},
+		"zod": {
+			"optional": true
+		}
+	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231218.0",
 		"@edge-runtime/vm": "^3.1.7",
