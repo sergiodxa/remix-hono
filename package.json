@@ -57,6 +57,7 @@
 		},
 		"./package.json": "./package.json"
 	},
+	"sideEffects": false,
 	"scripts": {
 		"prepare": "npm run build",
 		"build": "tsc --project tsconfig.json --outDir ./build",
