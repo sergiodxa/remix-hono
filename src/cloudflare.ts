@@ -9,7 +9,7 @@ import {
 import { createMiddleware } from "hono/factory";
 import { cacheHeader } from "pretty-cache-header";
 
-import { session } from "./session";
+import { session } from "./session.js";
 
 interface StaticAssetsOptions {
 	cache?: Parameters<typeof cacheHeader>[0];

@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"lib": ["ES2019"],
 		"esModuleInterop": true,
-		"moduleResolution": "Node",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
 		"target": "ES2019",
 		"strict": true,
 		"skipLibCheck": true,
