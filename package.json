@@ -58,6 +58,9 @@
 		"./package.json": "./package.json"
 	},
 	"sideEffects": false,
+	"sponsor": {
+		"url": "https://github.com/sponsors/sergiodxa"
+	},
 	"scripts": {
 		"prepare": "npm run build",
 		"build": "tsc --project tsconfig.json --outDir ./build",
