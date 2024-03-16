@@ -26,7 +26,8 @@ depending on what features from remix-hono you're using.
 - `i18next` and `remix-i18next` if you're using the i18n middleware.
 - `zod` if you're using `typedEnv`.
 
-> [!NOTE] You don't really need to install them if you don't use them, but you
+> [!NOTE]
+> You don't really need to install them if you don't use them, but you
 > will need to install them yourself (they don't come not automatically) if you
 > use the features that depends on those packages.
 
