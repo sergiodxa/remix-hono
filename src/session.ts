@@ -7,13 +7,29 @@ import type { Context } from "hono";
 
 import { createMiddleware } from "hono/factory";
 
-const sessionStorageSymbol = Symbol();
-const sessionSymbol = Symbol();
+const defaultSessionStorageSymbol = Symbol();
+const defaultSessionSymbol = Symbol();
 
 export function session<Data = SessionData, FlashData = Data>(options: {
 	autoCommit?: boolean;
 	createSessionStorage(c: Context): SessionStorage<Data, FlashData>;
+	sessionStorageKey?: PropertyKey;
+	sessionKey?: PropertyKey;
 }) {
+	if (
+		options.autoCommit &&
+		((options.sessionStorageKey && !options.sessionKey) ||
+			(!options.sessionStorageKey && options.sessionKey))
+	) {
+		throw new Error(
+			"When autoCommit is enabled, both sessionStorageKey and sessionKey must be set.",
+		);
+	}
+
+	let sessionStorageSymbol =
+		options.sessionStorageKey ?? defaultSessionStorageSymbol;
+	let sessionSymbol = options.sessionKey ?? defaultSessionSymbol;
+
 	return createMiddleware(async (c, next) => {
 		let sessionStorage = options.createSessionStorage(c);
 
@@ -46,6 +62,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 
 export function getSessionStorage<Data = SessionData, FlashData = Data>(
 	c: Context,
+	sessionStorageSymbol: PropertyKey = defaultSessionStorageSymbol,
 ): SessionStorage<Data, FlashData> {
 	let sessionStorage = c.get(sessionStorageSymbol);
 	if (!sessionStorage) {
@@ -56,6 +73,7 @@ export function getSessionStorage<Data = SessionData, FlashData = Data>(
 
 export function getSession<Data = SessionData, FlashData = Data>(
 	c: Context,
+	sessionSymbol: PropertyKey = defaultSessionSymbol,
 ): Session<Data, FlashData> {
 	let session = c.get(sessionSymbol);
 	if (!session) {

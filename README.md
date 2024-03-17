@@ -199,6 +199,43 @@ server.use(
 In both `workerKVSession` and `cookieSession` you use `getSession` and
 `getSessionStorage` imported from `remix-hono/session`
 
+If you want to use multiple sessions, you can specify custom `sessionStorageKey` / `sessionKey`.
+
+```ts
+server.use(
+	"*",
+	cookieSession({
+		sessionStorageKey: "session-storage-1",
+		sessionKey: "session-1",
+		// ...
+	}),
+	workerKVSession({
+		sessionStorageKey: "session-storage-2",
+		sessionKey: "session-2",
+		// ...
+	}),
+	remix<ContextEnv>({
+		build,
+		mode: process.env.NODE_ENV as "development" | "production",
+		getLoadContext(c) {
+			let sessionStorage1 = getSessionStorage(c, "session-storage-1");
+			let session1 = getSession(c, "session-1");
+
+			let sessionStorage2 = getSessionStorage(c, "session-storage-2");
+			let session2 = getSession(c, "session-2");
+
+			return {
+				...c.env,
+				sessionStorage1,
+				session1,
+				sessionStorage2,
+				session2,
+			};
+		},
+	}),
+);
+```
+
 ## Static Assets on Cloudflare
 
 If you're using Remix Hono with Cloudflare, you will need to serve your static

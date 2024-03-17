@@ -214,6 +214,28 @@ describe("middleware", () => {
 				kv: "kv",
 			});
 		});
+
+		test("forwards sessionKey and sessionStorageKey", async () => {
+			workerKVSession<"KV_BINDING", "SECRET">({
+				autoCommit: true,
+				cookie: {
+					name: "session",
+					secrets(c) {
+						return [c.env.SECRET];
+					},
+				},
+				binding: "KV_BINDING",
+				sessionKey: "sessionKey",
+				sessionStorageKey: "sessionStorageKey",
+			});
+
+			expect(session).toHaveBeenCalledWith({
+				autoCommit: true,
+				createSessionStorage: expect.any(Function),
+				sessionKey: "sessionKey",
+				sessionStorageKey: "sessionStorageKey",
+			});
+		});
 	});
 
 	describe(cookieSession.name, () => {
@@ -269,6 +291,27 @@ describe("middleware", () => {
 			expect(createCookieSessionStorage).toHaveBeenCalledTimes(1);
 			expect(createCookieSessionStorage).toHaveBeenCalledWith({
 				cookie: { name: "session", secrets: ["s3cr3t"] },
+			});
+		});
+
+		test("forwards sessionKey and sessionStorageKey", async () => {
+			cookieSession<"SECRET">({
+				autoCommit: true,
+				cookie: {
+					name: "session",
+					secrets(c) {
+						return [c.env.SECRET];
+					},
+				},
+				sessionKey: "sessionKey",
+				sessionStorageKey: "sessionStorageKey",
+			});
+
+			expect(session).toHaveBeenCalledWith({
+				autoCommit: true,
+				createSessionStorage: expect.any(Function),
+				sessionKey: "sessionKey",
+				sessionStorageKey: "sessionStorageKey",
 			});
 		});
 	});

@@ -66,9 +66,13 @@ export function workerKVSession<
 		secrets: GetWorkerKVSecretsFunction<KVBinding, SecretBinding>;
 	};
 	binding: KVBinding;
+	sessionStorageKey?: PropertyKey;
+	sessionKey?: PropertyKey;
 }) {
 	return session<Data, FlashData>({
 		autoCommit: options.autoCommit,
+		sessionStorageKey: options.sessionStorageKey,
+		sessionKey: options.sessionKey,
 		createSessionStorage(c) {
 			if (!(options.binding in c.env)) {
 				throw new ReferenceError("The binding for the kvSession is not set.");
@@ -107,9 +111,13 @@ export function cookieSession<
 		name: string;
 		secrets: GetCookieSecretsFunction<SecretBinding>;
 	};
+	sessionStorageKey?: PropertyKey;
+	sessionKey?: PropertyKey;
 }) {
 	return session<Data, FlashData>({
 		autoCommit: options.autoCommit,
+		sessionStorageKey: options.sessionStorageKey,
+		sessionKey: options.sessionKey,
 		createSessionStorage(c) {
 			let secrets = options.cookie.secrets(c);
 
