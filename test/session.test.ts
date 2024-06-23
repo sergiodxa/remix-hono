@@ -105,6 +105,56 @@ describe(session.name, () => {
 			},
 		);
 	});
+
+	test("sets multiple sessions", async () => {
+		let next = vi.fn().mockResolvedValueOnce(true);
+
+		let middleware1 = session({
+			autoCommit: true,
+			createSessionStorage,
+			sessionKey: "session-1",
+			sessionStorageKey: "session-storage-1",
+		});
+		let middleware2 = session({
+			autoCommit: true,
+			createSessionStorage,
+			sessionKey: "session-2",
+			sessionStorageKey: "session-storage-2",
+		});
+
+		await middleware1(c, async () => {
+			await middleware2(c, next);
+		});
+
+		expect(c.set).toHaveBeenNthCalledWith(
+			1,
+			"session-storage-1",
+			sessionStorage,
+		);
+		expect(c.set).toHaveBeenNthCalledWith(
+			3,
+			"session-storage-2",
+			sessionStorage,
+		);
+	});
+
+	test("throws error if only one of sessionStorageKey or sessionKey is set", () => {
+		expect(() =>
+			session({
+				autoCommit: true,
+				createSessionStorage: createSessionStorage,
+				sessionStorageKey: "session-storage-1",
+			}),
+		).toThrowError();
+
+		expect(() =>
+			session({
+				autoCommit: true,
+				createSessionStorage: createSessionStorage,
+				sessionKey: "session-1",
+			}),
+		).toThrowError();
+	});
 });
 
 describe(getSessionStorage.name, () => {
@@ -131,6 +181,18 @@ describe(getSessionStorage.name, () => {
 
 		expect(sessionStorage).not.toBeNull();
 	});
+
+	test("returns custom session storage", async () => {
+		let get = vi.fn().mockReturnValueOnce({});
+		getSessionStorage(
+			{
+				get: get,
+			} as unknown as Context,
+			"custom",
+		);
+
+		expect(get).toHaveBeenCalledWith("custom");
+	});
 });
 
 describe(getSession.name, () => {
@@ -151,10 +213,22 @@ describe(getSession.name, () => {
 	});
 
 	test("returns session", async () => {
-		let session = getSessionStorage({
+		let session = getSession({
 			get: vi.fn().mockReturnValueOnce({}),
 		} as unknown as Context);
 
 		expect(session).not.toBeNull();
+	});
+
+	test("returns custom session", async () => {
+		let get = vi.fn().mockReturnValueOnce({});
+		getSession(
+			{
+				get: get,
+			} as unknown as Context,
+			"custom",
+		);
+
+		expect(get).toHaveBeenCalledWith("custom");
 	});
 });
