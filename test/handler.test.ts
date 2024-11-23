@@ -1,4 +1,4 @@
-import type { ServerBuild } from "@remix-run/server-runtime";
+import type { ServerBuild } from "react-router";
 
 import { Hono } from "hono";
 import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
@@ -29,11 +29,7 @@ const build = {
 			default: () => new Response("body"),
 		},
 	},
-	future: {
-		v3_fetcherPersist: true,
-		v3_relativeSplatPath: true,
-		v3_throwAbortReason: true,
-	},
+	future: {},
 	publicPath: "/",
 	routes: {
 		root: {
@@ -45,7 +41,6 @@ const build = {
 		},
 	},
 	isSpaMode: false,
-	mode: "production",
 } satisfies ServerBuild;
 
 describe(remix.name, () => {

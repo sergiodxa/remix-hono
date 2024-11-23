@@ -1,14 +1,10 @@
-import type {
-	Session,
-	SessionData,
-	SessionStorage,
-} from "@remix-run/server-runtime";
 import type { Context } from "hono";
+import type { Session, SessionData, SessionStorage } from "react-router";
 
 import { createMiddleware } from "hono/factory";
 
-const sessionStorageSymbol = Symbol();
-const sessionSymbol = Symbol();
+const sessionStorageSymbol = Symbol().toString();
+const sessionSymbol = Symbol().toString();
 
 export function session<Data = SessionData, FlashData = Data>(options: {
 	autoCommit?: boolean;

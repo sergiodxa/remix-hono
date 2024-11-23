@@ -1,10 +1,10 @@
-import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { Context } from "hono";
+import { createCookieSessionStorage } from "react-router";
 import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
 import { getSession, getSessionStorage, session } from "../src/session";
 
-vi.mock("@remix-run/node", () => {
+vi.mock("@react-router/node", () => {
 	return {
 		createCookieSessionStorage: vi.fn(),
 	};
@@ -64,7 +64,7 @@ describe(session.name, () => {
 		expect(createSessionStorage).toHaveBeenCalledOnce();
 		expect(c.set).toHaveBeenNthCalledWith(
 			1,
-			expect.any(Symbol),
+			expect.any(String),
 			sessionStorage,
 		);
 		expect(next).toHaveBeenCalledOnce();
@@ -84,7 +84,7 @@ describe(session.name, () => {
 		expect(createSessionStorage).toHaveBeenCalledOnce();
 		expect(c.set).toHaveBeenNthCalledWith(
 			1,
-			expect.any(Symbol),
+			expect.any(String),
 			sessionStorage,
 		);
 		expect(spy.getSession).toHaveBeenCalledOnce();
@@ -93,7 +93,7 @@ describe(session.name, () => {
 
 		expect(c.set).toHaveBeenNthCalledWith(
 			2,
-			expect.any(Symbol),
+			expect.any(String),
 			sessionInContext,
 		);
 		expect(next).toHaveBeenCalledOnce();
@@ -121,7 +121,7 @@ describe(getSessionStorage.name, () => {
 			"A session middleware was not set.",
 		);
 
-		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
+		expect(c.get).toHaveBeenCalledWith(expect.any(String));
 	});
 
 	test("returns session storage", async () => {
@@ -147,7 +147,7 @@ describe(getSession.name, () => {
 			"A session middleware was not set.",
 		);
 
-		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
+		expect(c.get).toHaveBeenCalledWith(expect.any(String));
 	});
 
 	test("returns session", async () => {

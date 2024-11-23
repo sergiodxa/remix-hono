@@ -1,9 +1,7 @@
-import {
-	createCookieSessionStorage,
-	createWorkersKVSessionStorage,
-} from "@remix-run/cloudflare";
+import { createWorkersKVSessionStorage } from "@react-router/cloudflare";
 import { Context } from "hono";
 import { createMiddleware } from "hono/factory";
+import { createCookieSessionStorage } from "react-router";
 import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
 import {
@@ -13,9 +11,13 @@ import {
 } from "../src/cloudflare";
 import { session } from "../src/session";
 
-vi.mock("@remix-run/cloudflare", () => {
+vi.mock("@react-router/cloudflare", () => {
 	return {
 		createWorkersKVSessionStorage: vi.fn(),
+	};
+});
+vi.mock("react-router", () => {
+	return {
 		createCookieSessionStorage: vi.fn(),
 	};
 });

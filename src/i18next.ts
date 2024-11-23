@@ -2,12 +2,12 @@ import type { Context } from "hono";
 import type { RemixI18NextOption } from "remix-i18next/server";
 
 import { createMiddleware } from "hono/factory";
-import { Namespace, TFunction } from "i18next";
+import { FlatNamespace, TFunction } from "i18next";
 import { RemixI18Next } from "remix-i18next/server";
 
-const i18nSymbol = Symbol();
-const LocaleSymbol = Symbol();
-const TSymbol = Symbol();
+const i18nSymbol = Symbol().toString();
+const LocaleSymbol = Symbol().toString();
+const TSymbol = Symbol().toString();
 
 export function i18next(options: RemixI18NextOption | RemixI18Next) {
 	return createMiddleware(async (c, next) => {
@@ -46,10 +46,9 @@ i18next.getLocale = function getLocale(c: Context) {
 	return locale;
 };
 
-i18next.getFixedT = function getFixedT<Ns extends Namespace = "translation">(
-	c: Context,
-	{ namespace }: { namespace?: Ns } = {},
-) {
+i18next.getFixedT = function getFixedT<
+	Ns extends FlatNamespace = "translation",
+>(c: Context, { namespace }: { namespace?: Ns } = {}) {
 	// If `namespace` is set, we return a new `t` function that is bound to the
 	// given namespace. Otherwise, we return the default `t` function.
 	if (namespace) {
