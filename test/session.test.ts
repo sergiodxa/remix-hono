@@ -62,7 +62,11 @@ describe(session.name, () => {
 		await middleware(c, next);
 
 		expect(createSessionStorage).toHaveBeenCalledOnce();
-		expect(c.set).toHaveBeenNthCalledWith(1, "sessionStorage", sessionStorage);
+		expect(c.set).toHaveBeenNthCalledWith(
+			1,
+			expect.any(Symbol),
+			sessionStorage,
+		);
 		expect(next).toHaveBeenCalledOnce();
 		expect(spy.getSession).not.toBeCalled();
 	});
@@ -78,12 +82,20 @@ describe(session.name, () => {
 		await middleware(c, next);
 
 		expect(createSessionStorage).toHaveBeenCalledOnce();
-		expect(c.set).toHaveBeenNthCalledWith(1, "sessionStorage", sessionStorage);
+		expect(c.set).toHaveBeenNthCalledWith(
+			1,
+			expect.any(Symbol),
+			sessionStorage,
+		);
 		expect(spy.getSession).toHaveBeenCalledOnce();
 
 		let sessionInContext = await sessionStorage.getSession();
 
-		expect(c.set).toHaveBeenNthCalledWith(2, "session", sessionInContext);
+		expect(c.set).toHaveBeenNthCalledWith(
+			2,
+			expect.any(Symbol),
+			sessionInContext,
+		);
 		expect(next).toHaveBeenCalledOnce();
 		expect(c.header).toHaveBeenLastCalledWith(
 			"set-cookie",
@@ -109,7 +121,7 @@ describe(getSessionStorage.name, () => {
 			"A session middleware was not set.",
 		);
 
-		expect(c.get).toHaveBeenCalledWith("sessionStorage");
+		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
 	});
 
 	test("returns session storage", async () => {
@@ -135,7 +147,7 @@ describe(getSession.name, () => {
 			"A session middleware was not set.",
 		);
 
-		expect(c.get).toHaveBeenCalledWith("session");
+		expect(c.get).toHaveBeenCalledWith(expect.any(Symbol));
 	});
 
 	test("returns session", async () => {

@@ -3,14 +3,18 @@ import type { Session, SessionData, SessionStorage } from "react-router";
 
 import { createMiddleware } from "hono/factory";
 
-const sessionStorageKey = "sessionStorage";
-const sessionKey = "session";
+type Env = {
+	Variables: Record<symbol, unknown>;
+};
+
+const sessionStorageKey = Symbol();
+const sessionKey = Symbol();
 
 export function session<Data = SessionData, FlashData = Data>(options: {
 	autoCommit?: boolean;
 	createSessionStorage(c: Context): SessionStorage<Data, FlashData>;
 }) {
-	return createMiddleware(async (c, next) => {
+	return createMiddleware<Env>(async (c, next) => {
 		let sessionStorage = options.createSessionStorage(c);
 
 		c.set(sessionStorageKey, sessionStorage);
@@ -41,7 +45,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 }
 
 export function getSessionStorage<Data = SessionData, FlashData = Data>(
-	c: Context,
+	c: Context<Env>,
 ): SessionStorage<Data, FlashData> {
 	let sessionStorage = c.get(sessionStorageKey);
 	if (!sessionStorage) {
@@ -51,7 +55,7 @@ export function getSessionStorage<Data = SessionData, FlashData = Data>(
 }
 
 export function getSession<Data = SessionData, FlashData = Data>(
-	c: Context,
+	c: Context<Env>,
 ): Session<Data, FlashData> {
 	let session = c.get(sessionKey);
 	if (!session) {
