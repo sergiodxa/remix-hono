@@ -3,8 +3,8 @@ import type { Session, SessionData, SessionStorage } from "react-router";
 
 import { createMiddleware } from "hono/factory";
 
-const sessionStorageSymbol = Symbol().toString();
-const sessionSymbol = Symbol().toString();
+const sessionStorageKey = "sessionStorage";
+const sessionKey = "session";
 
 export function session<Data = SessionData, FlashData = Data>(options: {
 	autoCommit?: boolean;
@@ -13,7 +13,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 	return createMiddleware(async (c, next) => {
 		let sessionStorage = options.createSessionStorage(c);
 
-		c.set(sessionStorageSymbol, sessionStorage);
+		c.set(sessionStorageKey, sessionStorage);
 
 		// If autoCommit is disabled, we just create the SessionStorage and make it
 		// available with c.get(sessionStorageSymbol), then call next() and
@@ -28,7 +28,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 		);
 
 		// And make it available with c.get(sessionSymbol).
-		c.set(sessionSymbol, session);
+		c.set(sessionKey, session);
 
 		// Then we call next() to let the rest of the middlewares run.
 		await next();
@@ -43,7 +43,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 export function getSessionStorage<Data = SessionData, FlashData = Data>(
 	c: Context,
 ): SessionStorage<Data, FlashData> {
-	let sessionStorage = c.get(sessionStorageSymbol);
+	let sessionStorage = c.get(sessionStorageKey);
 	if (!sessionStorage) {
 		throw new Error("A session middleware was not set.");
 	}
@@ -53,7 +53,7 @@ export function getSessionStorage<Data = SessionData, FlashData = Data>(
 export function getSession<Data = SessionData, FlashData = Data>(
 	c: Context,
 ): Session<Data, FlashData> {
-	let session = c.get(sessionSymbol);
+	let session = c.get(sessionKey);
 	if (!session) {
 		throw new Error("A session middleware was not set.");
 	}
