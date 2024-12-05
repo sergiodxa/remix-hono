@@ -62,7 +62,6 @@
 		"url": "https://github.com/sponsors/sergiodxa"
 	},
 	"scripts": {
-		"prepare": "npm run build",
 		"build": "tsc --project tsconfig.json --outDir ./build",
 		"typecheck": "tsc --project tsconfig.json --noEmit",
 		"lint": "eslint --ext .ts,.tsx src/ test/",
