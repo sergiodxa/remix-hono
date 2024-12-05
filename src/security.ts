@@ -12,6 +12,6 @@ export function httpsOnly() {
 		}
 
 		url.protocol = "https:";
-		c.redirect(url.toString());
+		return c.redirect(url.toString());
 	});
 }
