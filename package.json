@@ -98,6 +98,7 @@
 		"@edge-runtime/vm": "^4.0.4",
 		"@react-router/cloudflare": "^7.0.1",
 		"@react-router/node": "^7.0.1",
+		"@total-typescript/tsconfig": "^1.0.4",
 		"@types/node": "^20.11.28",
 		"@typescript-eslint/eslint-plugin": "^7.2.0",
 		"@typescript-eslint/parser": "^7.2.0",
