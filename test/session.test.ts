@@ -1,10 +1,10 @@
-import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { Context } from "hono";
+import { createCookieSessionStorage } from "react-router";
 import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
 import { getSession, getSessionStorage, session } from "../src/session";
 
-vi.mock("@remix-run/node", () => {
+vi.mock("@react-router/node", () => {
 	return {
 		createCookieSessionStorage: vi.fn(),
 	};

@@ -1,8 +1,8 @@
-import type { AppLoadContext, ServerBuild } from "@remix-run/server-runtime";
 import type { Context } from "hono";
+import type { AppLoadContext, ServerBuild } from "react-router";
 
-import { createRequestHandler } from "@remix-run/server-runtime";
 import { createMiddleware } from "hono/factory";
+import { createRequestHandler } from "react-router";
 
 export interface RemixMiddlewareOptions {
 	build: ServerBuild;
@@ -25,4 +25,4 @@ export function remix({
 	});
 }
 
-export { createRequestHandler } from "@remix-run/server-runtime";
+export { createRequestHandler } from "react-router";
