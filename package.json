@@ -75,14 +75,12 @@
 		"quality:fix": "biome check . --write --unsafe",
 		"exports": "bun run ./scripts/exports.ts"
 	},
-	"dependencies": {
-		"react-router": "^7.0.1",
-		"hono": "^4.6.11",
-		"pretty-cache-header": "^1.0.0"
-	},
 	"peerDependencies": {
 		"@react-router/cloudflare": "^7.0.1",
+		"hono": "^4.6.11",
 		"i18next": "^23.0.0",
+		"pretty-cache-header": "^1.0.0",
+		"react-router": "^7.0.1",
 		"remix-i18next": "^7.0.0",
 		"zod": "^3.0.0"
 	},
