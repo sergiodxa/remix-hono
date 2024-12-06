@@ -1,14 +1,17 @@
-import type { Context } from "hono";
-
+import type {
+	Fetcher,
+	KVNamespace,
+	RequestInit,
+} from "@cloudflare/workers-types";
 import { createWorkersKVSessionStorage } from "@react-router/cloudflare";
+import type { Context } from "hono";
 import { createMiddleware } from "hono/factory";
 import { cacheHeader } from "pretty-cache-header";
 import {
-	CookieOptions,
-	SessionData,
+	type CookieOptions,
+	type SessionData,
 	createCookieSessionStorage,
 } from "react-router";
-
 import { session } from "./session.js";
 
 interface StaticAssetsOptions {
@@ -26,7 +29,10 @@ export function staticAssets(options: StaticAssetsOptions = {}) {
 		c.req.raw.headers.delete("if-none-match");
 
 		try {
-			response = await binding.fetch(c.req.url, c.req.raw.clone());
+			response = (await binding.fetch(
+				c.req.url,
+				c.req.raw.clone() as unknown as RequestInit,
+			)) as unknown as globalThis.Response;
 
 			// If the request failed, we just call the next middleware
 			if (response.status >= 400) return await next();

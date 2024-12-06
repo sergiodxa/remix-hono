@@ -1,19 +1,9 @@
 {
+	/* Change to `@total-typescript/tsconfig/tsc/dom/library` for DOM usage */
+	"extends": "@total-typescript/tsconfig/tsc/no-dom/library",
+	"include": ["src/**/*"],
+	"exclude": ["src/**/*.test.*"],
 	"compilerOptions": {
-		"lib": ["ES2020"],
-		"esModuleInterop": true,
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"target": "ES2020",
-		"strict": true,
-		"skipLibCheck": true,
-		"declaration": true,
-		"types": ["@cloudflare/workers-types"],
-		"baseUrl": ".", // This must be specified if "paths" is specified
-		"paths": {
-			"remix-hono/cloudflare": ["./build/cloudflare"] // relative to "baseUrl"
-		}
-	},
-	"exclude": ["node_modules"],
-	"include": ["src/**/*.ts"]
+		"outDir": "./build"
+	}
 }

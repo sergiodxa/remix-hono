@@ -1,19 +1,14 @@
+import { afterAll, describe, expect, mock, test } from "bun:test";
 import { Context } from "hono";
-import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
-
 import { httpsOnly } from "../src/security";
 
 describe(httpsOnly.name, () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	afterAll(() => {
-		vi.resetAllMocks();
+		mock.restore();
 	});
 
 	test("calls `next` if protocol is `https`", async () => {
-		let next = vi.fn().mockResolvedValueOnce(true);
+		let next = mock().mockResolvedValueOnce(true);
 		let c = {
 			req: {
 				url: "https://example.com",
@@ -24,16 +19,16 @@ describe(httpsOnly.name, () => {
 
 		await middleware(c, next);
 
-		expect(next).toHaveBeenCalledOnce();
+		expect(next).toHaveBeenCalledTimes(1);
 	});
 
 	test("enforces `https`", async () => {
-		let next = vi.fn().mockResolvedValueOnce(true);
+		let next = mock().mockResolvedValueOnce(true);
 		let c = {
 			req: {
 				url: "http://example.com",
 			},
-			redirect: vi.fn(),
+			redirect: mock(),
 		} as unknown as Context;
 
 		let middleware = httpsOnly();

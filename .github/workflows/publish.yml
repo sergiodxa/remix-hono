@@ -4,23 +4,20 @@ on:
   release:
     types: [published]
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
-
 jobs:
   publish-npm:
     name: "Publish to npm"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
 
       - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           registry-url: https://registry.npmjs.org/
-
-      - run: npm install
 
       - run: npm publish --access public
         env:

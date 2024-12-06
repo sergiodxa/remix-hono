@@ -1,20 +1,19 @@
 import type { Context } from "hono";
-import type { AppLoadContext, ServerBuild } from "react-router";
-
 import { createMiddleware } from "hono/factory";
+import type { AppLoadContext, ServerBuild } from "react-router";
 import { createRequestHandler } from "react-router";
 
-export interface RemixMiddlewareOptions {
+export interface ReactRouterMiddlewareOptions {
 	build: ServerBuild;
 	mode?: "development" | "production";
 	getLoadContext?(c: Context): Promise<AppLoadContext> | AppLoadContext;
 }
 
-export function remix({
+export function reactRouter({
 	mode,
 	build,
 	getLoadContext = (c) => c.env as unknown as AppLoadContext,
-}: RemixMiddlewareOptions) {
+}: ReactRouterMiddlewareOptions) {
 	return createMiddleware(async (c) => {
 		let requestHandler = createRequestHandler(build, mode);
 		let loadContext = getLoadContext(c);
@@ -24,5 +23,3 @@ export function remix({
 		);
 	});
 }
-
-export { createRequestHandler } from "react-router";
