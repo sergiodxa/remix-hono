@@ -1,8 +1,0 @@
-/.github
-/src
-/test
-.eslintrc.js
-.gitignore
-.npmignore
-tsconfig.json
-prettier.config.mjs

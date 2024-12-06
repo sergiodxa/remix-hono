@@ -62,6 +62,12 @@
 	"sponsor": {
 		"url": "https://github.com/sponsors/sergiodxa"
 	},
+	"files": [
+		"src",
+		"build",
+		"package.json",
+		"README.md"
+	],
 	"scripts": {
 		"build": "tsc",
 		"typecheck": "tsc --noEmit",
