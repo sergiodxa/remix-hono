@@ -1,8 +1,8 @@
 import type { Context } from "hono";
+import type { FlatNamespace, TFunction } from "i18next";
 import type { RemixI18NextOption } from "remix-i18next/server";
 
 import { createMiddleware } from "hono/factory";
-import { FlatNamespace, TFunction } from "i18next";
 import { RemixI18Next } from "remix-i18next/server";
 
 const i18nSymbol = Symbol().toString();
