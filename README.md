@@ -1,15 +1,15 @@
-# Remix + Hono
+# Remix/React Router + Hono
 
-> [Remix](https://remix.run) is a web framework for building web applications,
-> which can run on the Edge.
+> [React Router](https://remix.run) is a web framework for building web
+> applications, which can run on the Edge.
 
 > [Hono](https://hono.dev) is a small and ultrafast web framework for the Edges.
 
-This adapter allows you to use Hono with Remix, so you can use the best of each
-one.
+This adapter allows you to use Hono with React Router, so you can use the best
+of each one.
 
-Let Hono power your HTTP server and its middlewares, then use Remix to build
-your web application.
+Let Hono power your HTTP server and its middlewares, then use React Router to
+build your web application.
 
 ## Installation
 
@@ -22,26 +22,26 @@ npm add remix-hono
 The following packages are optional dependencies, you will need to install them
 depending on what features from remix-hono you're using.
 
-- `@remix-run/cloudflare` if you're using Cloudflare integration.
+- `@react-router/cloudflare` if you're using Cloudflare integration.
 - `i18next` and `remix-i18next` if you're using the i18n middleware.
 - `zod` if you're using `typedEnv`.
 
-> [!NOTE]
-> You don't really need to install them if you don't use them, but you
+> [!NOTE] You don't really need to install them if you don't use them, but you
 > will need to install them yourself (they don't come not automatically) if you
 > use the features that depends on those packages.
 
 ## Usage
 
-Create your Hono + Remix server:
+Create your Hono + React Routers server:
 
 ```ts
-import { logDevReady } from "@remix-run/cloudflare";
-import * as build from "@remix-run/dev/server-build";
+import { logDevReady } from "@react-router/cloudflare";
 import { Hono } from "hono";
 // You can also use it with other runtimes
 import { handle } from "hono/cloudflare-pages";
-import { remix } from "remix-hono/handler";
+import { reactRouter } from "remix-hono/handler";
+
+import build from "./build/server";
 
 if (process.env.NODE_ENV === "development") logDevReady(build);
 
@@ -55,10 +55,10 @@ type ContextEnv = { Bindings: Bindings; Variables: Variables };
 
 const server = new Hono<ContextEnv>();
 
-// Add the Remix middleware to your Hono server
+// Add the React Router middleware to your Hono server
 server.use(
 	"*",
-	remix({
+	reactRouter({
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
@@ -79,9 +79,9 @@ import { basicAuth } from "hono/basic-auth";
 
 server.use(
 	"*",
-	basicAuth({ username: "hono", password: "remix" }),
-	// Ensure Remix request handler is the last one
-	remix(options),
+	basicAuth({ username: "hono", password: "react-router" }),
+	// Ensure React Router request handler is the last one
+	reactRouter(options),
 );
 ```
 
@@ -90,20 +90,18 @@ great of preview applications.
 
 ## Session Management
 
-Additionally to the `remix` Hono middleware, there are other three middlewares
-to work with Remix sessions.
+Additionally to the `reactRouter` Hono middleware, there are other three
+middlewares to work with React Router sessions.
 
-Because Remix sessions typically use a secret coming from the environment you
-will need access to Hono `c.env` to use them. If you're using the Worker KV
+Because React Router sessions typically use a secret coming from the environment
+you will need access to Hono `c.env` to use them. If you're using the Worker KV
 session storage you will also need to pass the KV binding to the middleware.
 
 You can use the different middlewares included in this package to do that:
 
 ```ts
 import { session } from "remix-hono/session";
-// Install the `@remix-run/*` package for your server adapter to grab the
-// factory functions for session storage
-import { createWorkerKVSessionStorage } from "@remix-run/cloudflare";
+import { createWorkerKVSessionStorage } from "@react-router/cloudflare";
 
 server.use(
 	"*",
@@ -123,7 +121,7 @@ server.use(
 );
 ```
 
-Now, setup the Remix middleware after your session middleware and use the
+Now, setup the React Router middleware after your session middleware and use the
 helpers `getSessionStorage` and `getSession` to access the SessionStorage and
 Session objects.
 
@@ -136,7 +134,7 @@ import { getSessionStorage, getSession } from "remix-hono/session";
 
 server.use(
 	"*",
-	remix<ContextEnv>({
+	reactRouter<ContextEnv>({
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here
@@ -205,32 +203,33 @@ If you're using Remix Hono with Cloudflare, you will need to serve your static
 from the public folder (except for `public/build`). The `staticAssets`
 middleware serves this purpose.
 
-First install `@remix-run/cloudflare` if you haven't installed it yet.
+First install `@react-router/cloudflare` if you haven't installed it yet.
 
 ```sh
-npm add @remix-run/cloudflare
+npm add @react-router/cloudflare
 ```
 
 Then use the middleware in your server.
 
 ```ts
 import { staticAssets } from "remix-hono/cloudflare";
-import { remix } from "remix-hono/handler";
+import { reactRouter } from "remix-hono/handler";
 
 server.use(
 	"*",
 	staticAssets(),
-	// Add Remix request handler as the last middleware
-	remix(options),
+	// Add React Router request handler as the last middleware
+	reactRouter(options),
 );
 ```
 
 ## i18next integration
 
 If you're using [remix-i18next](https://github.com/sergiodxa/remix-i18next) to
-support i18n in your Remix app, the `i18next` middleware let's you setup it for
-your Remix app as a middleware that you can later use in your `getLoadContext`
-function to pass the `locale` and `t` functions to your loaders and actions.
+support i18n in your React Router app, the `i18next` middleware let's you setup
+it for your React Router app as a middleware that you can later use in your
+`getLoadContext` function to pass the `locale` and `t` functions to your loaders
+and actions.
 
 First install `i18next` and `remix-i18next` if you haven't already.
 
@@ -253,7 +252,7 @@ functions using the helpers `i18next.getLocale` and `i18next.getFixedT`.
 ```ts
 server.use(
 	"*",
-	remix({
+	reactRouter({
 		build,
 		mode: process.env.NODE_ENV as "development" | "production",
 		// getLoadContext is optional, the default function is the same as here

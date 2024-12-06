@@ -1,9 +1,9 @@
 import type { ServerBuild } from "react-router";
 
+import { describe, test, expect, mock, afterAll } from "bun:test";
 import { Hono } from "hono";
-import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
-import { remix } from "../src/handler";
+import { reactRouter } from "../src/handler";
 
 const build = {
 	assets: {
@@ -43,20 +43,19 @@ const build = {
 	isSpaMode: false,
 } satisfies ServerBuild;
 
-describe(remix.name, () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
+describe(reactRouter.name, () => {
 	afterAll(() => {
-		vi.resetAllMocks();
+		mock.restore();
 	});
 
 	test("getLoadContext could return a promise value", async () => {
-		let getLoadContext = vi.fn().mockResolvedValueOnce("loadContext");
+		let getLoadContext = mock().mockResolvedValueOnce("loadContext");
 
 		let server = new Hono();
-		server.use("*", remix({ mode: "development", build, getLoadContext }));
+		server.use(
+			"*",
+			reactRouter({ mode: "development", build, getLoadContext }),
+		);
 
 		let response = await server.request("/");
 
@@ -65,10 +64,13 @@ describe(remix.name, () => {
 	});
 
 	test("getLoadContext could return a non-promise value", async () => {
-		let getLoadContext = vi.fn().mockReturnValueOnce("loadContext");
+		let getLoadContext = mock().mockReturnValueOnce("loadContext");
 
 		let server = new Hono();
-		server.use("*", remix({ mode: "development", build, getLoadContext }));
+		server.use(
+			"*",
+			reactRouter({ mode: "development", build, getLoadContext }),
+		);
 
 		let response = await server.request("/");
 
@@ -78,7 +80,7 @@ describe(remix.name, () => {
 
 	test("getLoadContext could be omitted", async () => {
 		let server = new Hono();
-		server.use("*", remix({ mode: "development", build }));
+		server.use("*", reactRouter({ mode: "development", build }));
 
 		let response = await server.request("/");
 

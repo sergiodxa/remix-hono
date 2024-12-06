@@ -22,9 +22,7 @@ export function session<Data = SessionData, FlashData = Data>(options: {
 		// If autoCommit is disabled, we just create the SessionStorage and make it
 		// available with c.get(sessionStorageSymbol), then call next() and
 		// return.
-		if (!options.autoCommit) {
-			return await next();
-		}
+		if (!options.autoCommit) return await next();
 
 		// If autoCommit is enabled, we get the Session from the request.
 		let session = await sessionStorage.getSession(

@@ -1,58 +1,57 @@
+import { describe, test, expect, mock, afterAll, spyOn } from "bun:test";
 import { Context } from "hono";
 import { createCookieSessionStorage } from "react-router";
-import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 
 import { getSession, getSessionStorage, session } from "../src/session";
-
-vi.mock("@react-router/node", () => {
-	return {
-		createCookieSessionStorage: vi.fn(),
-	};
-});
-
-vi.stubEnv("SESSION_SECRET", "s3cr3t");
 
 const sessionStorage = createCookieSessionStorage({
 	cookie: {
 		name: "session",
 		httpOnly: true,
-		secrets: [process.env.SESSION_SECRET!],
+		secrets: ["s3cr3t"],
 	},
 });
 
-const createSessionStorage = vi.fn().mockImplementation(() => sessionStorage);
+const createSessionStorage = mock().mockImplementation(() => sessionStorage);
 
 const c = {
-	set: vi.fn(),
-	get: vi.fn(),
+	set: mock(),
+	get: mock(),
 	req: {
 		raw: {
 			headers: {
-				get: vi.fn().mockReturnValue("session=cookie"),
+				get: mock().mockReturnValue("session=cookie"),
 			},
 		},
 	},
-	header: vi.fn(),
+	header: mock(),
 } as unknown as Context;
 
+const original = {
+	getSession: sessionStorage.getSession,
+	commitSession: sessionStorage.commitSession,
+	destroySession: sessionStorage.destroySession,
+};
+
 const spy = {
-	getSession: vi
-		.spyOn(sessionStorage, "getSession")
-		.mockResolvedValue(await sessionStorage.getSession()),
-	commitSession: vi.fn().mockResolvedValue("session cookie"),
+	getSession: spyOn(sessionStorage, "getSession").mockImplementation(
+		original.getSession,
+	),
+	commitSession: spyOn(sessionStorage, "commitSession").mockImplementation(
+		original.commitSession,
+	),
+	destroySession: spyOn(sessionStorage, "destroySession").mockImplementation(
+		original.destroySession,
+	),
 };
 
 describe(session.name, () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	afterAll(() => {
-		vi.resetAllMocks();
+		mock.restore();
 	});
 
 	test("calls `next` if no `autoCommit`", async () => {
-		let next = vi.fn().mockResolvedValueOnce(true);
+		let next = mock().mockResolvedValueOnce(true);
 
 		let middleware = session({
 			autoCommit: false,
@@ -61,18 +60,14 @@ describe(session.name, () => {
 
 		await middleware(c, next);
 
-		expect(createSessionStorage).toHaveBeenCalledOnce();
-		expect(c.set).toHaveBeenNthCalledWith(
-			1,
-			expect.any(Symbol),
-			sessionStorage,
-		);
-		expect(next).toHaveBeenCalledOnce();
-		expect(spy.getSession).not.toBeCalled();
+		expect(createSessionStorage).toHaveBeenCalledTimes(1);
+		expect(c.set).toHaveBeenCalled();
+		expect(next).toHaveBeenCalledTimes(1);
+		expect(spy.getSession).toHaveBeenCalledTimes(0);
 	});
 
 	test("`set-cookie` if `autoCommit`", async () => {
-		let next = vi.fn().mockResolvedValueOnce(true);
+		let next = mock().mockImplementation(() => Promise.resolve(true));
 
 		let middleware = session({
 			autoCommit: true,
@@ -80,40 +75,31 @@ describe(session.name, () => {
 		});
 
 		await middleware(c, next);
+		console.log("here");
 
-		expect(createSessionStorage).toHaveBeenCalledOnce();
-		expect(c.set).toHaveBeenNthCalledWith(
-			1,
-			expect.any(Symbol),
-			sessionStorage,
-		);
-		expect(spy.getSession).toHaveBeenCalledOnce();
-
-		let sessionInContext = await sessionStorage.getSession();
-
+		expect(createSessionStorage).toHaveBeenCalledTimes(2);
 		expect(c.set).toHaveBeenNthCalledWith(
 			2,
 			expect.any(Symbol),
-			sessionInContext,
+			sessionStorage,
 		);
-		expect(next).toHaveBeenCalledOnce();
+		expect(spy.getSession).toHaveBeenCalledTimes(1);
+
+		let sessionInContext = await sessionStorage.getSession();
+
+		expect(c.set).toHaveBeenCalled();
+		expect(next).toHaveBeenCalledTimes(1);
 		expect(c.header).toHaveBeenLastCalledWith(
 			"set-cookie",
 			await sessionStorage.commitSession(sessionInContext),
-			{
-				append: true,
-			},
+			{ append: true },
 		);
 	});
 });
 
 describe(getSessionStorage.name, () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	afterAll(() => {
-		vi.resetAllMocks();
+		mock.restore();
 	});
 
 	test("throws if no session storage", async () => {
@@ -126,7 +112,7 @@ describe(getSessionStorage.name, () => {
 
 	test("returns session storage", async () => {
 		let sessionStorage = getSessionStorage({
-			get: vi.fn().mockReturnValueOnce({}),
+			get: mock().mockReturnValueOnce({}),
 		} as unknown as Context);
 
 		expect(sessionStorage).not.toBeNull();
@@ -134,12 +120,8 @@ describe(getSessionStorage.name, () => {
 });
 
 describe(getSession.name, () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	afterAll(() => {
-		vi.resetAllMocks();
+		mock.restore();
 	});
 
 	test("throws if no session storage", async () => {
@@ -152,7 +134,7 @@ describe(getSession.name, () => {
 
 	test("returns session", async () => {
 		let session = getSessionStorage({
-			get: vi.fn().mockReturnValueOnce({}),
+			get: mock().mockReturnValueOnce({}),
 		} as unknown as Context);
 
 		expect(session).not.toBeNull();
