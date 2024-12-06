@@ -21,14 +21,14 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run typecheck
 
-  # quality:
-  #   name: Code Quality
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: oven-sh/setup-bun@v2
-  #     - run: bun install --frozen-lockfile
-  #     - run: bun run quality
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run quality
 
   test:
     name: Tests
