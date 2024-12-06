@@ -1,6 +1,5 @@
-import { describe, test, expect, mock, afterAll } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 import { Context } from "hono";
-
 import { httpsOnly } from "../src/security";
 
 describe(httpsOnly.name, () => {

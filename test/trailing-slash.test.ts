@@ -1,6 +1,5 @@
-import { describe, test, expect, mock, afterAll } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 import { Context } from "hono";
-
 import { trailingSlash } from "../src/trailing-slash";
 
 describe(trailingSlash.name, () => {

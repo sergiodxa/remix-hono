@@ -1,8 +1,6 @@
-import type { ServerBuild } from "react-router";
-
-import { describe, test, expect, mock, afterAll } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 import { Hono } from "hono";
-
+import type { ServerBuild } from "react-router";
 import { reactRouter } from "../src/handler";
 
 const build = {

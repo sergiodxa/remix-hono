@@ -1,7 +1,6 @@
 import type { Context } from "hono";
-import type { AppLoadContext, ServerBuild } from "react-router";
-
 import { createMiddleware } from "hono/factory";
+import type { AppLoadContext, ServerBuild } from "react-router";
 import { createRequestHandler } from "react-router";
 
 export interface ReactRouterMiddlewareOptions {

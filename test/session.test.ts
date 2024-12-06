@@ -1,7 +1,6 @@
-import { describe, test, expect, mock, afterAll, spyOn } from "bun:test";
+import { afterAll, describe, expect, mock, spyOn, test } from "bun:test";
 import { Context } from "hono";
 import { createCookieSessionStorage } from "react-router";
-
 import { getSession, getSessionStorage, session } from "../src/session";
 
 const sessionStorage = createCookieSessionStorage({
@@ -75,7 +74,6 @@ describe(session.name, () => {
 		});
 
 		await middleware(c, next);
-		console.log("here");
 
 		expect(createSessionStorage).toHaveBeenCalledTimes(2);
 		expect(c.set).toHaveBeenNthCalledWith(

@@ -1,7 +1,6 @@
 import type { Context } from "hono";
-import type { Session, SessionData, SessionStorage } from "react-router";
-
 import { createMiddleware } from "hono/factory";
+import type { Session, SessionData, SessionStorage } from "react-router";
 
 type Env = {
 	Variables: Record<symbol, unknown>;

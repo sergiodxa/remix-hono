@@ -1,7 +1,6 @@
 import type { Context } from "hono";
-import type { z } from "zod";
-
 import { env } from "hono/adapter";
+import type { z } from "zod";
 
 export function typedEnv<Schema extends z.ZodTypeAny>(
 	c: Context,

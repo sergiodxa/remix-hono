@@ -1,11 +1,10 @@
 import type {
 	Fetcher,
-	RequestInit,
 	KVNamespace,
+	RequestInit,
 } from "@cloudflare/workers-types";
-import type { Context } from "hono";
-
 import { createWorkersKVSessionStorage } from "@react-router/cloudflare";
+import type { Context } from "hono";
 import { createMiddleware } from "hono/factory";
 import { cacheHeader } from "pretty-cache-header";
 import {
@@ -13,7 +12,6 @@ import {
 	type SessionData,
 	createCookieSessionStorage,
 } from "react-router";
-
 import { session } from "./session.js";
 
 interface StaticAssetsOptions {
