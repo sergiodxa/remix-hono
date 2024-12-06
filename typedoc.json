@@ -1,0 +1,20 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "Remix Hono",
+  "includeVersion": true,
+  "entryPoints": [
+    "./src/cloudflare.ts",
+    "./src/handler.ts",
+    "./src/i18next.ts",
+    "./src/security.ts",
+    "./src/session.ts",
+    "./src/trailing-slash.ts",
+    "./src/typed-env.ts"
+  ],
+  "out": "pages",
+  "json": "pages/index.json",
+  "cleanOutputDir": true,
+  "projectDocuments": ["./docs/*.md"],
+  "plugin": ["typedoc-plugin-mdn-links"],
+  "categorizeByGroup": false
+}
