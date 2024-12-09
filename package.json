@@ -73,7 +73,7 @@
 	"peerDependencies": {
 		"@react-router/cloudflare": "^7.0.1",
 		"hono": "^4.6.12",
-		"i18next": "^23.0.0",
+		"i18next": "^24.0.5",
 		"pretty-cache-header": "^1.0.0",
 		"react-router": "^7.0.1",
 		"remix-i18next": "^7.0.0",
@@ -102,7 +102,7 @@
 		"@react-router/cloudflare": "^7.0.1",
 		"@total-typescript/tsconfig": "^1.0.4",
 		"@types/bun": "^1.1.14",
-		"i18next": "^23.0.0",
+		"i18next": "^24.0.5",
 		"remix-i18next": "^7.0.0",
 		"typedoc": "^0.27.3",
 		"typedoc-plugin-mdn-links": "^4.0.3",
