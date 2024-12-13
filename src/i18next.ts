@@ -4,12 +4,16 @@ import type { FlatNamespace, TFunction } from "i18next";
 import type { RemixI18NextOption } from "remix-i18next/server";
 import { RemixI18Next } from "remix-i18next/server";
 
-const i18nSymbol = Symbol().toString();
-const LocaleSymbol = Symbol().toString();
-const TSymbol = Symbol().toString();
+type Env = {
+	Variables: Record<symbol, unknown>;
+};
+
+const i18nSymbol = Symbol();
+const LocaleSymbol = Symbol();
+const TSymbol = Symbol();
 
 export function i18next(options: RemixI18NextOption | RemixI18Next) {
-	return createMiddleware(async (c, next) => {
+	return createMiddleware<Env>(async (c, next) => {
 		let i18n =
 			options instanceof RemixI18Next ? options : new RemixI18Next(options);
 
@@ -25,7 +29,7 @@ export function i18next(options: RemixI18NextOption | RemixI18Next) {
 	});
 }
 
-i18next.get = function get(c: Context) {
+i18next.get = function get(c: Context<Env>) {
 	let i18n = c.get(i18nSymbol) as RemixI18Next | undefined;
 	if (!i18n) {
 		throw new Error(
@@ -35,7 +39,7 @@ i18next.get = function get(c: Context) {
 	return i18n;
 };
 
-i18next.getLocale = function getLocale(c: Context) {
+i18next.getLocale = function getLocale(c: Context<Env>) {
 	let locale = c.get(LocaleSymbol) as string | undefined;
 	if (!locale) {
 		throw new Error(
@@ -47,7 +51,7 @@ i18next.getLocale = function getLocale(c: Context) {
 
 i18next.getFixedT = function getFixedT<
 	Ns extends FlatNamespace = "translation",
->(c: Context, { namespace }: { namespace?: Ns } = {}) {
+>(c: Context<Env>, { namespace }: { namespace?: Ns } = {}) {
 	// If `namespace` is set, we return a new `t` function that is bound to the
 	// given namespace. Otherwise, we return the default `t` function.
 	if (namespace) {
