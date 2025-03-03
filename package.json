@@ -110,7 +110,7 @@
 		"i18next": "^24.0.5",
 		"remix-i18next": "^7.0.0",
 		"typedoc": "^0.27.3",
-		"typedoc-plugin-mdn-links": "^4.0.3",
+		"typedoc-plugin-mdn-links": "^5.0.1",
 		"typescript": "^5.7.2",
 		"vite": "^6.0.3",
 		"vite-tsconfig-paths": "^5.1.3",
