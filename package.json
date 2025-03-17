@@ -109,7 +109,7 @@
 		"@types/bun": "^1.1.14",
 		"i18next": "^24.0.5",
 		"remix-i18next": "^7.0.0",
-		"typedoc": "^0.27.3",
+		"typedoc": "^0.28.0",
 		"typedoc-plugin-mdn-links": "^5.0.1",
 		"typescript": "^5.7.2",
 		"vite": "^6.0.3",
