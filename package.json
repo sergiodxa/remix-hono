@@ -102,7 +102,7 @@
 		}
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.0.5",
 		"@cloudflare/workers-types": "^4.20241205.0",
 		"@react-router/cloudflare": "^7.0.1",
 		"@total-typescript/tsconfig": "^1.0.4",
