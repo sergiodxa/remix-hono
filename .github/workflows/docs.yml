@@ -25,7 +25,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile && bunx typedoc
       - uses: actions/configure-pages@v6
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: "./pages"
       - uses: actions/deploy-pages@v5
