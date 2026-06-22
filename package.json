@@ -76,7 +76,7 @@
 		"exports": "bun run ./scripts/exports.ts"
 	},
 	"peerDependencies": {
-		"@react-router/cloudflare": "^7.0.1",
+		"@react-router/cloudflare": "^8.0.1",
 		"hono": "^4.6.12",
 		"i18next": "^26.0.2",
 		"pretty-cache-header": "^1.0.0",
@@ -104,7 +104,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.5",
 		"@cloudflare/workers-types": "^4.20241205.0",
-		"@react-router/cloudflare": "^7.0.1",
+		"@react-router/cloudflare": "^8.0.1",
 		"@total-typescript/tsconfig": "^1.0.4",
 		"@types/bun": "^1.1.14",
 		"i18next": "^26.0.2",
