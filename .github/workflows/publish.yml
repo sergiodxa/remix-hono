@@ -14,7 +14,7 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run build
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: "lts/*"
           registry-url: https://registry.npmjs.org/
